@@ -1,15 +1,16 @@
 <?php
 include "conexion.php";
 $id = $_GET['id'];
-$nombre =$_POST['nombre'];
-$dpi =$_POST['dpi'];
-$telefono =$_POST['telefono'];
-$fecha =$_POST['fecha'];
-$carrera =$_POST['carrera'];
-$año =$_POST['año'];
-$sql = $conn -> query("UPDATE registros SET nombre ='".$nombre."', dpi='".$dpi."', telefono='".$telefono."', fecha_nacimiento='".$fecha."', carrera='".$carrera."', año='".$año."' WHERE id ='".$id."'");
+$nombres = $_POST['nombre'];
+$apellidos = $_POST['apellido'];
+$grado = $_POST['grado'];
+$carrera = $_POST['carrera'];
+$nickname = $_POST['nickname'];
+$correo = $_POST['correo'];
+$notas = $_POST['nota'];
+$sql = $conn -> query("UPDATE alum SET nombres ='".$nombres."', apellidos='".$apellidos."', grado='".$grado."', carrera='".$carrera."', nickname='".$nickname."', correo='".$correo."', notas='".$notas."' WHERE id ='".$id."'");
 if($sql==1){
-    header('Location:Listar.php');
+    header('Location:indexadmin.php');
 }
 
 ?>

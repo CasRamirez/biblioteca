@@ -114,7 +114,7 @@
         <?php
     include "conexion.php";
     $id = $id=$_GET['id'];
-    $sql = $conn ->query("SELECT * FROM registros WHERE id='$id'");
+    $sql = $conn ->query("SELECT * FROM alum WHERE id='$id'");
     while($dat=$sql->fetch_object()){
 ?>
    <form action="edit.php?id=<?php echo $dat->id; ?>" method="post">
@@ -123,32 +123,37 @@
         <input type="text" class="form-control" name="id" value="<?php echo $dat->id; ?>" disabled ></div>
       <div class="mb-3">
         <label class="form-label">Nombre del alumno</label>
-        <input type="text" class="form-control" name="nombre" value="<?php echo $dat -> nombre;?>" placeholder="Nombre del producto" required >
+        <input type="text" class="form-control" name="nombre" value="<?php echo $dat -> nombres;?>" placeholder="Ingrese el nombre" required >
       </div>
 
       <div class="mb-3">
-        <label class="form-label">DPI</label>
-        <input type="number" class="form-control" name="dpi"value="<?php echo $dat -> dpi;?>" placeholder="DPI" required>
+        <label class="form-label">Apellido del Alumno</label>
+        <input type="text" class="form-control" name="apellido"value="<?php echo $dat -> apellidos;?>" placeholder="Ingrese el apellido" required>
       </div>
 
       <div class="mb-3">
-        <label class="form-label">No.Telefono</label>
-        <input type="number" class="form-control" name="telefono"value="<?php echo $dat -> telefono;?>" placeholder="Numero del alumno" required>
+        <label class="form-label">Grado del Alumno</label>
+        <input type="text" class="form-control" name="grado"value="<?php echo $dat -> grado;?>" placeholder="Ingrese el grado" required>
       
       </div>
       <div class="mb-3">
-        <label class="form-label">Fecha de Nacimiento</label>
-        <input type="date" class="form-control" name="fecha"value="<?php echo $dat -> fecha_nacimiento;?>" placeholder="Fecha de nacimiento" required>
+        <label class="form-label">Carrera del Alumno</label>
+        <input type="text" class="form-control" name="carrera"value="<?php echo $dat -> carrera;?>" placeholder="Ingrese la carrera" required>
       
       </div>
       <div class="mb-3">
-        <label class="form-label">Carrera</label>
-        <input type="text" class="form-control" name="carrera"value="<?php echo $dat -> carrera;?>" placeholder="Carrera cursada" required>
+        <label class="form-label">Nickname del Alumno</label>
+        <input type="text" class="form-control" name="nickname"value="<?php echo $dat -> nickname;?>" placeholder="Ingrese el nickname" required>
       
       </div>
       <div class="mb-3">
-        <label class="form-label">Año</label>
-        <input type="number" class="form-control" name="año"value="<?php echo $dat -> año;?>" placeholder="Año del ALumno" required>
+        <label class="form-label">Correo del Alumno</label>
+        <input type="email" class="form-control" name="correo"value="<?php echo $dat -> correo;?>" placeholder="Ingrese el correo" required>
+      
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Nota</label>
+        <input type="number" class="form-control" name="nota"value="<?php echo $dat -> notas;?>" placeholder="Ingrese la nota" required>
       
       </div>
       <?php
