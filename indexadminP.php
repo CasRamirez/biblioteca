@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (!isset($_SESSION['username'])) {
+    header("Location: index.php");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,6 +12,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>PreuLand</title>
+    
     <link rel="stylesheet" href="dist/css/adminlte.min.css?v=3.2.0">
     <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
     <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
@@ -16,17 +24,18 @@
     <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="dist/css/adminlte.min.css">
+    
+    <!-- Estilo CSS para el color naranja -->
+    <style>
+        .nickname {
+            color: orange;
+            font-weight: bold;
+        }
+    </style>
 </head>
 
 <body class="hold-transition sidebar-mini">
-<?php
-        session_start();
-        if (!isset($_SESSION['nickname']) || !isset($_SESSION['id'])) {
-            header('location: index.php');
-        }
 
-    ?>
-    <!-- Site wrapper -->
     <div class="wrapper">
         <nav class="main-header navbar navbar-expand navbar-white navbar-light">
             <!-- Left navbar links -->
@@ -56,6 +65,7 @@
                     </style>
                     <div class="image">
                         <img src="image/auron.jpg" class="img-circle elevation-3" alt="User Image">
+                        <span class="nickname"><?php echo htmlspecialchars($_SESSION['nickname']); ?></span>
                     </div>
                 </div>
                 <!-- SidebarSearch Form -->
@@ -130,17 +140,16 @@
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item active">Profesores</li>
+                                <li class="breadcrumb-item active">Estudiantes</li>
                             </ol>
                         </div>
                     </div>
-                    
                 </div><!-- /.container-fluid -->
             </section>
             <!-- Main content -->
             <section class="content">
                 <div class="card">
-                    <div class="card-body">
+                <div class="card-body">
                         <table id="example1" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
@@ -189,7 +198,7 @@
             <div class="float-right d-none d-sm-block">
                 <b>Version</b> 1.0.0
             </div>
-            <strong>6to Computacion &copy; 2024 <a href="https://adminlte.io">Emanuel y Daniel</a>.</strong> Mamitas Pluebla.
+            <strong>6to Computacion &copy; 2024 <a href="https://adminlte.io">Oscar y Samuel</a>.</strong> PREULAND.
         </footer>
         <!-- Control Sidebar -->
         <aside class="control-sidebar control-sidebar-dark">

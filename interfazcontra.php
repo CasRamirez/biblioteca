@@ -84,14 +84,14 @@
                     <h1 class="title">Hola de nuevo</h1>
                     <p>Ingresa tu nueva contraseña</p>
                     <div class="col-6">
-                            <button type="button" onclick="window.location.href='index.php'" class="ghost">Regresar al inicio</button>
+                            <button type="button" onclick="window.location.href='cerrar.php'" class="ghost">Regresar al inicio</button>
                         </div>
                 </div>
                 <div class="overlay-panel overlay-right">
                     <h1 class="title">¿Olvidó su contraseña?</h1>
                     <p>Lo entendemos, a veces ocurren estas cosas. <br> ¡Simplemente ingrese el usuario al que desea cambiar la contraseña!</p>
                     <div class="col-6">
-                            <button type="button" onclick="window.location.href='index.php'" class="ghost">Regresar al inicio</button>
+                            <button type="button" onclick="window.location.href='cerrar.php'" class="ghost">Regresar al inicio</button>
                         </div>
                 </div>
             </div>

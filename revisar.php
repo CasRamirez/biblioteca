@@ -35,16 +35,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($user_type !== '') {
         $table = $user_type;
         $sql = "SELECT * FROM $table WHERE nickname='$username' AND contraseña='$hashed_password'";
-
-        // Ejecutar la consulta y verificar errores
         $result = $conn->query($sql);
+
         if ($result === false) {
             die("Error en la consulta: " . $conn->error);
         }
 
-        // Depurar resultados de la consulta
         if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
             $_SESSION['username'] = $username;
+            $_SESSION['nickname'] = $row['nickname'];
+            $_SESSION['id'] = $row['id'];
             header("Location: $redirect_page");
             exit();
         } else {

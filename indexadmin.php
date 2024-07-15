@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (!isset($_SESSION['username'])) {
+    header("Location: index.php");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,6 +12,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>PreuLand</title>
+    
     <link rel="stylesheet" href="dist/css/adminlte.min.css?v=3.2.0">
     <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
     <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
@@ -16,10 +24,18 @@
     <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="dist/css/adminlte.min.css">
+    
+    <!-- Estilo CSS para el color naranja -->
+    <style>
+        .nickname {
+            color: orange;
+            font-weight: bold;
+        }
+    </style>
 </head>
 
 <body class="hold-transition sidebar-mini">
-    <!-- Site wrapper -->
+
     <div class="wrapper">
         <nav class="main-header navbar navbar-expand navbar-white navbar-light">
             <!-- Left navbar links -->
@@ -49,6 +65,7 @@
                     </style>
                     <div class="image">
                         <img src="image/auron.jpg" class="img-circle elevation-3" alt="User Image">
+                        <span class="nickname"><?php echo htmlspecialchars($_SESSION['nickname']); ?></span>
                     </div>
                 </div>
                 <!-- SidebarSearch Form -->

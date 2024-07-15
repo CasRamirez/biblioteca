@@ -135,7 +135,7 @@
                     </center>
                     <center>
                         <div class="col-6">
-                            <button type="button" class="ghost" id="login" onclick="window.location.href='index.php'">Regresar</button><br>
+                            <button type="button" class="ghost" id="login" onclick="window.location.href='cerrar.php'">Regresar</button><br>
                         </div>
                     </center>
                 </div>
@@ -155,7 +155,7 @@
                          </center>
                          <center>
                             <div class="col-6">
-                                <button type="button" class="ghost" id="register" onclick="window.location.href='index.php'">Regresar</button><br>
+                                <button type="button" class="ghost" id="register" onclick="window.location.href='cerrar.php'">Regresar</button><br>
                             </div>
                          </center>
                     </div>

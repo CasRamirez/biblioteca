@@ -17,18 +17,14 @@ if (!isset($_SESSION['username'])) {
     <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-    <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="dist/css/adminlte.min.css">
     <style>
         .image .img-circle {
             width: 80px;
             height: 80px;
         }
-
         .nickname {
-            color: lime;
+            color: purple;
             font-weight: bold;
         }
     </style>
@@ -46,6 +42,7 @@ if (!isset($_SESSION['username'])) {
                 </li>
             </ul>
         </nav>
+
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
@@ -59,7 +56,7 @@ if (!isset($_SESSION['username'])) {
                 <!-- Sidebar user (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
-                        <img src="image/willy.jpg" class="img-circle elevation-3" alt="User Image">
+                        <img src="image/vege.jpg" class="img-circle elevation-3" alt="User Image">
                         <span class="nickname">
                             <?php echo htmlspecialchars($_SESSION['nickname']); ?>
                         </span>
@@ -71,9 +68,7 @@ if (!isset($_SESSION['username'])) {
                     <div class="input-group" data-widget="sidebar-search">
                         <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
                         <div class="input-group-append">
-                            <button class="btn btn-sidebar">
-                                <i class="fas fa-search fa-fw"></i>
-                            </button>
+                            <button class="btn btn-sidebar"><i class="fas fa-search fa-fw"></i></button>
                         </div>
                     </div>
                 </div>
@@ -91,17 +86,18 @@ if (!isset($_SESSION['username'])) {
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="indexprof.php" class="nav-link">
+                                    <a href="indexalum.php" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Cursos</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="notasP.php" class="nav-link">
+                                    <a href="notas.php" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Notas</p>
                                     </a>
                                 </li>
+                          
                                 <li class="nav-item">
                                     <a href="interfazcontra.php" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
@@ -111,7 +107,7 @@ if (!isset($_SESSION['username'])) {
                                 <li class="nav-item">
                                     <a href="cerrar.php" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>Cerrar Sesion</p>
+                                        <p>Cerrar Sesión</p>
                                     </a>
                                 </li>
                             </ul>
@@ -144,34 +140,31 @@ if (!isset($_SESSION['username'])) {
             <!-- Main content -->
             <section class="content">
                 <div class="card">
-                    <div class="card-body">
+                <div class="card-body">
                         <table id="example1" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
                                     <th scope="col">#</th>
-                                    <th scope="col">Nombre</th>
-                                    <th scope="col">Apellido</th>
-                                    <th scope="col">Grado</th>
-                                    <th scope="col">Carrera</th>
-                                    <th scope="col">Notas</th>
-                                    <th scope="col">Editar</th>
+                                    <th scope="col">Curso</th>
+                                    <th scope="col">Nota</th>
+                                  
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php
                                 include "conexion.php";
-                                $sql = $conn->query("SELECT * FROM alum");
+
+                                // Consulta para obtener las notas de los alumnos según las materias impartidas por los profesores
+                                $sql = $conn->query("SELECT p.id, p.materia, rn.nota
+                                                    FROM prof p
+                                                    LEFT JOIN relacion_notas rn ON p.id = rn.profesor_id");
+
                                 while ($dat = $sql->fetch_object()) {
                                 ?>
                                     <tr>
                                         <td><?php echo isset($dat->id) ? $dat->id : 'N/A'; ?></td>
-                                        <td><?php echo isset($dat->nombres) ? $dat->nombres : 'N/A'; ?></td>
-                                        <td><?php echo isset($dat->apellidos) ? $dat->apellidos : 'N/A'; ?></td>
-                                        <td><?php echo isset($dat->grado) ? $dat->grado : 'N/A'; ?></td>
-                                        <td><?php echo isset($dat->carrera) ? $dat->carrera : 'N/A'; ?></td>
-                                        <td><?php echo isset($dat->notas) ? $dat->notas : 'N/A'; ?></td>
-                                        <td><a href="editar.php?id=<?php echo $dat->id; ?>" class="btn btn-small btn-warning"><i class="fas fa-edit"></i></a></td>
-                                    </tr>
+                                        <td><?php echo isset($dat->materia) ? $dat->materia : 'N/A'; ?></td>
+                                        <td><?php echo isset($dat->nota) ? $dat->nota : 'N/A'; ?></td>
                                 <?php
                                 }
                                 ?>
@@ -179,31 +172,20 @@ if (!isset($_SESSION['username'])) {
                         </table>
                     </div>
                 </div>
-            </section>
-            <!-- /.content -->
-        </div>
-        <!-- /.content-wrapper -->
+            </section><!-- /.content -->
+        </div><!-- /.content-wrapper -->
 
         <footer class="main-footer">
             <div class="float-right d-none d-sm-block">
-                <b>Version</b> 1.0.0
+                <b>Versión</b> 1.0.0
             </div>
-            <strong>6to Computacion &copy; 2024 <a href="https://adminlte.io">Emanuel y Daniel</a>.</strong> Mamitas Pluebla.
+            <strong>6to Computación &copy; 2024 <a href="https://adminlte.io">Oscar y Samuel</a>.</strong>PREULAND.
         </footer>
+    </div><!-- ./wrapper -->
 
-        <!-- Control Sidebar -->
-        <aside class="control-sidebar control-sidebar-dark">
-            <!-- Control sidebar content goes here -->
-        </aside>
-        <!-- /.control-sidebar -->
-    </div>
-    <!-- ./wrapper -->
-
-    <!-- jQuery -->
+    <!-- Scripts -->
     <script src="plugins/jquery/jquery.min.js"></script>
-    <!-- Bootstrap 4 -->
     <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- DataTables & Plugins -->
     <script src="plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
     <script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
@@ -216,11 +198,9 @@ if (!isset($_SESSION['username'])) {
     <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
     <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
     <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-    <!-- AdminLTE App -->
     <script src="dist/js/adminlte.min.js?v=3.2.0"></script>
-    <!-- AdminLTE for demo purposes -->
     <script src="dist/js/demo.js"></script>
-    <!-- Page specific script -->
+
     <script>
         $(function() {
             $("#example1").DataTable({
@@ -229,18 +209,9 @@ if (!isset($_SESSION['username'])) {
                 "autoWidth": false,
                 "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-            $('#example2').DataTable({
-                "paging": true,
-                "lengthChange": false,
-                "searching": false,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true,
-            });
         });
+        window.addEventListener("load",window.print());
     </script>
-
 </body>
 
 </html>

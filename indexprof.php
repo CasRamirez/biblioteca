@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (!isset($_SESSION['username'])) {
+    header("Location: index.php");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -24,9 +31,6 @@
 
 <body class="hold-transition sidebar-mini">
 
-  
-
-
     <!-- Site wrapper -->
     <div class="wrapper">
         <nav class="main-header navbar navbar-expand navbar-white navbar-light">
@@ -35,20 +39,15 @@
                 <li class="nav-item">
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
-
             </ul>
-
         </nav>
         <!-- Navbar -->
-
-        <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
             <a href="index3.html" class="brand-link">
-            <img src="image/p.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8; width: 70px; height: 100px;">
-
+                <img src="image/p.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8; width: 70px; height: 100px;">
                 <span class="brand-text font-weight-light">REULAND</span>
             </a>
 
@@ -56,24 +55,29 @@
             <div class="sidebar">
                 <!-- Sidebar user (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                <style>
-    .image .img-circle {
-        width: 80px;
-        height: 80px;
-    }
-</style>
+                    <style>
+                        .image .img-circle {
+                            width: 80px;
+                            height: 80px;
+                        }
+                        .nickname {
+                            color: lime;
+                            font-weight: bold;
+                        }
+                    </style>
 
-<div class="image">
-   <img src="image/willy.jpg" class="img-circle elevation-3" alt="User Image">
-</div>
-                    
+                    <div class="image">
+                        <img src="image/willy.jpg" class="img-circle elevation-3" alt="User Image">
+                        <span class="nickname">
+                            <?php echo htmlspecialchars($_SESSION['nickname']); ?>
+                        </span>
+                    </div>
                 </div>
 
                 <!-- SidebarSearch Form -->
                 <div class="form-inline">
                     <div class="input-group" data-widget="sidebar-search">
-                        <input class="form-control form-control-sidebar" type="search" placeholder="Search"
-                            aria-label="Search">
+                        <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
                         <div class="input-group-append">
                             <button class="btn btn-sidebar">
                                 <i class="fas fa-search fa-fw"></i>
@@ -84,10 +88,7 @@
 
                 <!-- Sidebar Menu -->
                 <nav class="mt-2">
-                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
-                        data-accordion="false">
-                        <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -121,13 +122,10 @@
                                         <p>Cerrar Sesion</p>
                                     </a>
                                 </li>
-                                
-
                             </ul>
                         </li>
                     </ul>
                 </nav>
-                
                 <!-- /.sidebar-menu -->
             </div>
             <!-- /.sidebar -->
@@ -145,16 +143,16 @@
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item active">Estudiantes</li>
-                                
                             </ol>
-                           
-                            </form>
-                            
                         </div>
                     </div>
                 </div><!-- /.container-fluid -->
             </section>
-            <div class="card-body">
+
+            <!-- Main content -->
+            <section class="content">
+                <div class="card">
+                    <div class="card-body">
                         <table id="example1" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
@@ -186,18 +184,8 @@
                             </tbody>
                         </table>
                     </div>
-            <!-- Main content -->
-            <section class="content">
-            
-                <!-- Default box -->
-                <div class="card col-sm-7">
-
-                    <!-- /.card-footer-->
                 </div>
-                <!-- /.card -->
-
             </section>
-            <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->
 
@@ -217,15 +205,10 @@
     <!-- ./wrapper -->
 
     <!-- jQuery -->
-
-    <!-- AdminLTE App -->
-
-    
-
     <script src="plugins/jquery/jquery.min.js"></script>
-
+    <!-- Bootstrap 4 -->
     <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-
+    <!-- DataTables & Plugins -->
     <script src="plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
     <script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
@@ -238,31 +221,30 @@
     <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
     <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
     <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-
+    <!-- AdminLTE App -->
     <script src="dist/js/adminlte.min.js?v=3.2.0"></script>
-
+    <!-- AdminLTE for demo purposes -->
     <script src="dist/js/demo.js"></script>
-
+    <!-- Page specific script -->
     <script>
-    $(function() {
-        $("#example1").DataTable({
-            "responsive": true,
-            "lengthChange": false,
-            "autoWidth": false,
-            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-        $('#example2').DataTable({
-            "paging": true,
-            "lengthChange": false,
-            "searching": false,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false,
-            "responsive": true,
+        $(function() {
+            $("#example1").DataTable({
+                "responsive": true,
+                "lengthChange": false,
+                "autoWidth": false,
+                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+            $('#example2').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": false,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+            });
         });
-    });
     </script>
-    
 </body>
 
 </html>
