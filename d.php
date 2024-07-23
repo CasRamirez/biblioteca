@@ -12,9 +12,9 @@ if ($conn->connect_error) {
     die("Conexión fallida: " . $conn->connect_error);
 }
 
-$pass = md5("oscar123");
+$pass = md5("123");
 $sql = $conn->query("INSERT INTO adm (nombres, apellidos,nickname ,correo,contraseña)Values 
- ('Oscar', 'Casasola', 'oscar-admin', 'oscarcasasola360@gmail.com', '$pass')");
+ ('Moshe', 'Mata', 'moshe-admin', 'moshemata360@gmail.com', '$pass')");
 
 header('Location: index.php');
 

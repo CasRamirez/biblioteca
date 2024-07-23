@@ -21,6 +21,9 @@ if (!isset($_SESSION['username'])) {
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
     <!-- Theme style -->
@@ -139,32 +142,36 @@ if (!isset($_SESSION['username'])) {
             </div>
             <!-- /.sidebar -->
         </aside>
-        <!-- Modal -->
-        <div class="modal fade" id="reasonModal" tabindex="-1" aria-labelledby="reasonModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="reasonModalLabel">Razón de la eliminación</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+
+      <!-- Modal -->
+<div class="modal fade" id="reasonModal" tabindex="-1" aria-labelledby="reasonModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="reasonModalLabel">Razón de la eliminación</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="reasonForm">
+                    <div class="form-group">
+                        <label for="reason">Razón:</label>
+                        <input type="text" class="form-control" id="reason" required>
                     </div>
-                    <div class="modal-body">
-                        <form id="reasonForm">
-                            <div class="form-group">
-                                <label for="reason">Razón:</label>
-                                <input type="text" class="form-control" id="reason" required>
-                            </div>
-                            <input type="hidden" id="recordId">
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-primary" id="submitReason">Enviar</button>
-                    </div>
-                </div>
+                    <input type="hidden" id="recordId">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="submitReason">Enviar</button>
             </div>
         </div>
+    </div>
+</div>
+
+
+
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
@@ -214,8 +221,12 @@ if (!isset($_SESSION['username'])) {
                                     <td><?php echo isset($dat->materia) ? $dat->materia : 'N/A'; ?></td>
                                     <td><?php echo isset($dat->nickname) ? $dat->nickname : 'N/A'; ?></td>
                                     <td><?php echo isset($dat->correo) ? $dat->correo : 'N/A'; ?></td>
-                                    <td><a href="editarP.php?id=<?php echo $dat->id; ?>" class="btn btn-small btn-warning"><i class="fas fa-edit"></i></a></td>
-                                    <td><a href="eliminar.php?id=<?php echo $dat->id; ?>" class="btn btn-small btn-danger"><i class="fas fa-trash-alt"></i></a></td>
+                                    <td><a href="editarP.php?id=<?php echo $dat->id ?>" class="btn btn-warning"><i
+                                                class="fas fa-edit"></i></a></td>
+                                    <td>
+                                        <button onclick="confirmDelete('<?php echo $dat->id ?>')" class="btn btn-danger"><i
+                                                class="fas fa-trash-alt"></i></button>
+                                    </td>
                                 </tr>
                                 <?php
                                     }
@@ -226,26 +237,42 @@ if (!isset($_SESSION['username'])) {
                 </div>
             </section>
         </div>
-        <!-- /.content-wrapper -->
-        <footer class="main-footer">
-            <div class="float-right d-none d-sm-block">
-                <b>Version</b> 1.0.0
-            </div>
-            <strong>6to Computacion &copy; 2024 <a href="https://adminlte.io">Oscar y Samuel</a>.</strong> PREULAND.
-        </footer>
+
         <!-- Control Sidebar -->
         <aside class="control-sidebar control-sidebar-dark">
-            <!-- Control sidebar content goes here -->
         </aside>
-        <!-- /.control-sidebar -->
-    </div>
-    <!-- ./wrapper -->
 
-    <!-- jQuery -->
+        <!-- Main Footer -->
+        <footer class="main-footer">
+            <strong>REULAND</strong>
+            Todos los derechos reservados.
+            <div class="float-right d-none d-sm-inline-block">
+                <b>Version</b> 3.2.0
+            </div>
+        </footer>
+    </div>
+
+    <script>
+function confirmDelete(id) {
+    $('#recordId').val(id);
+    $('#reasonModal').modal('show');
+}
+
+$('#submitReason').click(function() {
+    var reason = $('#reason').val();
+    var id = $('#recordId').val();
+    var nickname = "<?php echo htmlspecialchars($_SESSION['nickname']); ?>"; // Obtener el nickname del usuario activo desde PHP
+
+    if (reason) {
+        window.location.href = 'eliminar.php?id=' + id + '&reason=' + encodeURIComponent(reason) + '&nickname=' + encodeURIComponent(nickname);
+    } else {
+        alert('Por favor, proporciona una razón.');
+    }
+});
+</script>
+
     <script src="plugins/jquery/jquery.min.js"></script>
-    <!-- Bootstrap 4 -->
     <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- DataTables  & Plugins -->
     <script src="plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
     <script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
@@ -268,24 +295,6 @@ if (!isset($_SESSION['username'])) {
             "autoWidth": false,
             "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
         }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-    });
-    </script>
-        <script>
-    function confirmDelete(id) {
-        $('#recordId').val(id);
-        $('#reasonModal').modal('show');
-    }
-
-    $('#submitReason').click(function() {
-        var reason = $('#reason').val();
-        var id = $('#recordId').val();
-
-        if (reason) {
-
-            window.location.href = 'eliminar.php?id=' + id + '&reason=' + encodeURIComponent(reason);
-        } else {
-            alert('Por favor, proporciona una razón.');
-        }
     });
     </script>
 </body>

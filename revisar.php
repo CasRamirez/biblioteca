@@ -44,6 +44,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $row = $result->fetch_assoc();
             $_SESSION['username'] = $username;
             $_SESSION['nickname'] = $row['nickname'];
+            $_SESSION['nombres'] = $row['nombres'];
+            $_SESSION['apellidos'] = $row['apellidos'];
+            $_SESSION['correo'] = $row['correo'];
+            $_SESSION['carrera'] = $row['carrera'];
+            $_SESSION['grado'] = $row['grado'];
             $_SESSION['id'] = $row['id'];
             header("Location: $redirect_page");
             exit();

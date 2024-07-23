@@ -129,10 +129,12 @@ $iduser=$_SESSION['id']
                         <div class="col-sm-6">
                             <h1>PreuLand</h1>
                         </div>
+                      
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item active">Estudiantes</li>
                             </ol>
+                            
                         </div>
                     </div>
                 </div><!-- /.container-fluid -->
@@ -142,6 +144,11 @@ $iduser=$_SESSION['id']
             <section class="content">
     <div class="card">
         <div class="card-body">
+        <h2><?php echo htmlspecialchars($_SESSION['nombres']) . " " . htmlspecialchars($_SESSION['apellidos']); ?></h2>
+        <h2><?php echo htmlspecialchars($_SESSION['correo']);?></h2>
+        <h2><?php echo htmlspecialchars($_SESSION['carrera']) . " " . htmlspecialchars($_SESSION['grado']); ?></h2>
+
+    
             <table id="example1" class="table table-bordered table-striped">
                 <thead>
                     <tr>

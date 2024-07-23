@@ -149,32 +149,32 @@ if (!isset($_SESSION['username'])) {
 
         <!-- alerta -->
 
-        <!-- Modal -->
-        <div class="modal fade" id="reasonModal" tabindex="-1" aria-labelledby="reasonModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="reasonModalLabel">Razón de la eliminación</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+       <!-- Modal -->
+<div class="modal fade" id="reasonModal" tabindex="-1" aria-labelledby="reasonModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="reasonModalLabel">Razón de la eliminación</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="reasonForm">
+                    <div class="form-group">
+                        <label for="reason">Razón:</label>
+                        <input type="text" class="form-control" id="reason" required>
                     </div>
-                    <div class="modal-body">
-                        <form id="reasonForm">
-                            <div class="form-group">
-                                <label for="reason">Razón:</label>
-                                <input type="text" class="form-control" id="reason" required>
-                            </div>
-                            <input type="hidden" id="recordId">
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-primary" id="submitReason">Enviar</button>
-                    </div>
-                </div>
+                    <input type="hidden" id="recordId">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="submitReason">Enviar</button>
             </div>
         </div>
+    </div>
+</div>
 
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
@@ -259,23 +259,23 @@ if (!isset($_SESSION['username'])) {
     </div>
 
     <script>
-    function confirmDelete(id) {
-        $('#recordId').val(id);
-        $('#reasonModal').modal('show');
+function confirmDelete(id) {
+    $('#recordId').val(id);
+    $('#reasonModal').modal('show');
+}
+
+$('#submitReason').click(function() {
+    var reason = $('#reason').val();
+    var id = $('#recordId').val();
+    var nickname = "<?php echo htmlspecialchars($_SESSION['nickname']); ?>"; // Obtener el nickname del usuario activo desde PHP
+
+    if (reason) {
+        window.location.href = 'eliminarA.php?id=' + id + '&reason=' + encodeURIComponent(reason) + '&nickname=' + encodeURIComponent(nickname);
+    } else {
+        alert('Por favor, proporciona una razón.');
     }
-
-    $('#submitReason').click(function() {
-        var reason = $('#reason').val();
-        var id = $('#recordId').val();
-
-        if (reason) {
-
-            window.location.href = 'eliminarA.php?id=' + id + '&reason=' + encodeURIComponent(reason);
-        } else {
-            alert('Por favor, proporciona una razón.');
-        }
-    });
-    </script>
+});
+</script>
 
 
 
@@ -317,4 +317,4 @@ if (!isset($_SESSION['username'])) {
     </script>
 </body>
 
-</html>
+</html> 

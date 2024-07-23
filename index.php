@@ -52,9 +52,9 @@
                 </div>
                 <span>O utiliza tu cuenta</span>
                 <div class="social-container">
-                    <a href="#" class="social"><i class="lni lni-facebook-fill"></i></a>
-                    <a href="#" class="social"><i class="lni lni-google"></i></a>
-                    <a href="#" class="social"><i class="lni lni-linkedin-original"></i></a>
+                    <a href="https://es-la.facebook.com/login/" class="social"><i class="lni lni-facebook-fill"></i></a>
+                    <a href="https://accounts.google.com/InteractiveLogin/signinchooser?continue=https%3A%2F%2Fmail.google.com%2Fmail%2F&emr=1&ltmpl=default&ltmplcache=2&osid=1&passive=true&rm=false&scc=1&service=mail&ss=1&ifkv=AdF4I772CHriVhdTIH3vFHhLklXNgQqyUyQ6AGNtcH_z3-bsrjxsssW9I6FSAVYwRnILHc8gkVnw&ddm=0&flowName=GlifWebSignIn&flowEntry=ServiceLogin" class="social"><i class="lni lni-google"></i></a>
+                    <a href="https://es.linkedin.com/" class="social"><i class="lni lni-linkedin-original"></i></a>
                 </div>
             </form>
         </div>

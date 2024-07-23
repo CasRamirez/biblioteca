@@ -1,23 +1,26 @@
 <?php
-session_start();
-if (!isset($_SESSION['username'])) {
-    header("Location: index.php");
-    exit();
-}
-
 include "conexion.php";
 
-$id = $_GET['id'];
-$reason = isset($_GET['reason']) ? $_GET['reason'] : '';
-$username = $_SESSION['username']; 
+if (isset($_GET['id']) && isset($_GET['reason']) && isset($_GET['nickname'])) {
+    $id = $_GET['id'];
+    $reason = $_GET['reason'];
+    $nickname = $_GET['nickname'];
 
-if (!empty($reason)) {
-    $stmt = $conn->prepare("UPDATE alum SET estado = 0, razon = ?, user_delete = ? WHERE id = ?");
-    $stmt->bind_param("ssi", $reason, $username, $id);
-    $stmt->execute();
-    $stmt->close();
-    header('Location: indexadmin.php');
+    // Actualiza el registro con la razón de eliminación y el usuario que realizó la eliminación
+    $sql = $conn->prepare("UPDATE alum SET estado = 0, razon = ?, user_delete = ? WHERE id = ?");
+    $sql->bind_param("ssi", $reason, $nickname, $id);
+
+    if ($sql->execute()) {
+        // Redirigir a la página de administración después de la eliminación exitosa
+        header("Location: indexadmin.php");
+        exit();
+    } else {
+        echo "Error actualizando el registro: " . $conn->error;
+    }
+
+    $sql->close();
+    $conn->close();
 } else {
-    echo 'No se proporcionó una razón. No se realizó ninguna actualización.';
+    echo "Datos incompletos.";
 }
 ?>
