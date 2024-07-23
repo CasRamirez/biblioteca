@@ -1,0 +1,122 @@
+CREATE DATABASE cole;
+USE cole;
+CREATE TABLE alum(
+    id INT(10) PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    nombres VARCHAR(35) NOT NULL,
+    apellidos VARCHAR(35) NOT NULL,
+    grado VARCHAR(35) NOT NULL,
+    carrera VARCHAR(35) NOT NULL,
+    nickname VARCHAR(35) NOT NULL,
+    correo VARCHAR(60),
+    contra TEXT,
+    contraseña TEXT,
+    usuario_tipo VARCHAR(50) DEFAULT 'alumno' NOT NULL,
+	notas int(3),
+    FKGrado VARCHAR(35) NOT NULL,
+    FkCarrera VARCHAR(35) NOT NULL
+);
+select * from alum;
+
+CREATE TABLE grado(
+    id INT(10) PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    nombre VARCHAR(35) NOT NULL
+);
+select * from grado;
+
+CREATE TABLE curso(
+    id INT(10) PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    nombre VARCHAR(35) NOT NULL,
+    descripcion VARCHAR(35) NOT NULL
+);
+select * from curso;
+CREATE TABLE carrera(
+    id INT(10) PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    nombre VARCHAR(35) NOT NULL,
+    descripcion VARCHAR(35) NOT NULL
+);
+select * from carrera;
+
+CREATE TABLE gradocursocarreraprof(
+    id INT(10) PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    Fkcurso VARCHAR(35) NOT NULL,
+    fKGrado VARCHAR(35) NOT NULL,
+    FkCarrera VARCHAR(35) NOT NULL,
+    FkProf VARCHAR(35) NOT NULL
+);
+select * from gradocursocarreraprof;
+
+CREATE TABLE gradocursocarreraalum(
+    id INT(10) PRIMARY KEY AUTO_INCREMENT NOT NULL,
+	notas VARCHAR(35) NOT NULL,
+    Fkcurso VARCHAR(35) NOT NULL,
+    fKGrado VARCHAR(35) NOT NULL,
+    FkCarrera VARCHAR(35) NOT NULL,
+    FkAlum VARCHAR(35) NOT NULL
+);
+select * from gradocursocarreraalum;
+
+CREATE TABLE prof(
+    id INT(10) PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    nombres VARCHAR(35) NOT NULL,
+    apellidos VARCHAR(35) NOT NULL,
+    carrera VARCHAR(35) NOT NULL,
+    materia VARCHAR(35) NOT NULL,
+    nickname VARCHAR(35) NOT NULL,
+    correo VARCHAR(60),
+    contraseña TEXT,
+    usuario_tipo VARCHAR(50) DEFAULT 'profesor' NOT NULL
+);
+select  * from prof;
+
+
+CREATE TABLE adm(
+    id INT(10) PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    nombres VARCHAR(35) NOT NULL,
+    apellidos VARCHAR(35) NOT NULL,
+    nickname VARCHAR(35) NOT NULL,
+    correo VARCHAR(60),
+    contra TEXT,
+    contraseña TEXT,
+    usuario_tipo VARCHAR(50) DEFAULT 'administrador' NOT NULL 
+);
+select * from adm;
+INSERT INTO adm (nombres, apellidos,nickname ,correo,contraseña)Values ("Oscar", "Casasola", "oscar-admin", "oscarcasasola360@gmail.com", "oscar123");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CREATE TABLE relacion_notas (
+    id INT(10) PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    alumno_id INT(10),
+    profesor_id INT(10),
+	curso_id INT(10),
+    nota INT(3),
+    FOREIGN KEY (alumno_id) REFERENCES alum(id),
+    FOREIGN KEY (profesor_id) REFERENCES prof(id)
+);
+select * from relacion_notas;
+CREATE TABLE eliminados (
+    id INT(10) PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    prof_id INT(10) NOT NULL,
+    reason TEXT NOT NULL,
+    admin_nickname VARCHAR(35) NOT NULL,
+    deleted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

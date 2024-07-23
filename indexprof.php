@@ -4,6 +4,7 @@ if (!isset($_SESSION['username'])) {
     header("Location: index.php");
     exit();
 }
+$iduser = isset($_SESSION['id']) ? $_SESSION['id'] : 0;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -98,6 +99,8 @@ if (!isset($_SESSION['username'])) {
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
+
+                   
                                 <li class="nav-item">
                                     <a href="indexprof.php" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
@@ -165,23 +168,51 @@ if (!isset($_SESSION['username'])) {
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php
-                                include "conexion.php";
-                                $sql = $conn->query("SELECT * FROM alum");
-                                while ($dat = $sql->fetch_object()) {
-                                ?>
-                                    <tr>
-                                        <td><?php echo isset($dat->id) ? $dat->id : 'N/A'; ?></td>
-                                        <td><?php echo isset($dat->nombres) ? $dat->nombres : 'N/A'; ?></td>
-                                        <td><?php echo isset($dat->apellidos) ? $dat->apellidos : 'N/A'; ?></td>
-                                        <td><?php echo isset($dat->grado) ? $dat->grado : 'N/A'; ?></td>
-                                        <td><?php echo isset($dat->carrera) ? $dat->carrera : 'N/A'; ?></td>
-                                        <td><?php echo isset($dat->nickname) ? $dat->nickname : 'N/A'; ?></td>
-                                    </tr>
-                                <?php
-                                }
-                                ?>
-                            </tbody>
+    <?php
+    include "conexion.php";
+
+    // Asegúrate de que $iduser esté definido
+    $iduser = isset($_SESSION['id']) ? $_SESSION['id'] : 0;
+
+    // Verifica si $iduser está definido y es un número válido
+    if ($iduser > 0) {
+        // Consulta para obtener la carrera del profesor
+        $prsql = $conn->query("SELECT carrera FROM prof WHERE id = $iduser");
+        if ($prsql && $prsql->num_rows > 0) {
+            $row = $prsql->fetch_assoc();
+            $carreraid = $row['carrera'];
+
+            echo "Profesor de : " . htmlspecialchars($carreraid);
+
+            // Consulta para obtener los alumnos de la misma carrera utilizando FIND_IN_SET
+            $sql = $conn->query("SELECT * FROM alum WHERE FIND_IN_SET(carrera, '$carreraid') > 0");
+            if ($sql) {
+                while ($dat = $sql->fetch_object()) {
+                    ?>
+                    <tr>
+                        <td><?php echo isset($dat->id) ? htmlspecialchars($dat->id) : 'N/A'; ?></td>
+                        <td><?php echo isset($dat->nombres) ? htmlspecialchars($dat->nombres) : 'N/A'; ?></td>
+                        <td><?php echo isset($dat->apellidos) ? htmlspecialchars($dat->apellidos) : 'N/A'; ?></td>
+                        <td><?php echo isset($dat->grado) ? htmlspecialchars($dat->grado) : 'N/A'; ?></td>
+                        <td><?php echo isset($dat->carrera) ? htmlspecialchars($dat->carrera) : 'N/A'; ?></td>
+                        <td><?php echo isset($dat->nickname) ? htmlspecialchars($dat->nickname) : 'N/A'; ?></td>
+                    </tr>
+                    <?php
+                }
+            } else {
+                echo "Error en la consulta de alumnos: " . $conn->error;
+            }
+        } else {
+            echo "No se encontró ningún profesor con el ID proporcionado.";
+        }
+    } else {
+        echo "ID de usuario no válido.";
+    }
+
+    // Cerrar la conexión
+    $conn->close();
+    ?>
+</tbody>
                         </table>
                     </div>
                 </div>

@@ -91,9 +91,7 @@ $iduser = isset($_SESSION['id']) ? $_SESSION['id'] : 0;
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
                             </a>
-                            
                             <ul class="nav nav-treeview">
-                
                                 <li class="nav-item">
                                     <a href="indexprof.php" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
@@ -145,63 +143,69 @@ $iduser = isset($_SESSION['id']) ? $_SESSION['id'] : 0;
                 </div><!-- /.container-fluid -->
             </section>
 
+<?php
+$carrera = isset($_GET['carrera']) ? $_GET['carrera'] : '';
 
-
-<!-- Main content -->
-<section class="content">
-    
-    <div class="card">
-        
-        <div class="card-body">
-        <?php
-if ($iduser > 0) {
-    // Consulta para obtener la carrera del profesor
-    $prsql = $conn->query("SELECT carrera FROM prof WHERE id = $iduser");
-    if ($prsql && $prsql->num_rows > 0) {
-        $row = $prsql->fetch_assoc();
-        $carreraid = $row['carrera'];
-
-        // Dividir la cadena de carreras en un array
-        $carreras = explode(',', $carreraid);
-        // Eliminar duplicados
-        $carreras = array_unique($carreras);
-
-        echo "Profesor de : " . htmlspecialchars(implode(', ', $carreras));
-    }
-}
-?>
-            <table id="example1" class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Nombre</th>
-                        <th scope="col">Ver Alumnos</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    if (isset($carreras) && count($carreras) > 0) {
-                        foreach ($carreras as $carrera) {
-                            $carrera = trim($carrera); // Elimina espacios adicionales
-                            ?>
+if (!empty($carrera)) {
+    // Consulta para obtener los alumnos de la carrera
+    $sql = $conn->query("SELECT * FROM alum WHERE FIND_IN_SET(carrera, '$carrera') > 0");
+    ?>
+    <!-- Main content -->
+    <section class="content">
+        <div class="card">
+            <div class="card-body">
+                <h3>Alumnos en la carrera: <?php echo htmlspecialchars($carrera); ?></h3>
+                <form action="actualizar_notas.php" method="post">
+                    <table id="example1" class="table table-bordered table-striped">
+                        <thead>
                             <tr>
-                                <td><?php echo htmlspecialchars($carrera); ?></td>
-                                <td><?php echo htmlspecialchars($carrera); ?></td>
-                                <td>
-                                    <a href="ver_alumnos.php?carrera=<?php echo urlencode($carrera); ?>" class="btn btn-primary">Ver</a>
-                                </td>
+                                <th scope="col">#</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Apellido</th>
+                                <th scope="col">Grado</th>
+                                <th scope="col">Carrera</th>
+                                <th scope="col">Nickname</th>
+                                <th scope="col">Notas</th>
+                                <th scope="col">Actualizar</th>
                             </tr>
+                        </thead>
+                        <tbody>
                             <?php
-                        }
-                    } else {
-                        echo "<tr><td colspan='3'>No hay carreras disponibles.</td></tr>";
-                    }
-                    ?>
-                </tbody>
-            </table>
+                            if ($sql && $sql->num_rows > 0) {
+                                while ($dat = $sql->fetch_object()) {
+                                    ?>
+                                    <tr>
+                                        <td><?php echo isset($dat->id) ? htmlspecialchars($dat->id) : 'N/A'; ?></td>
+                                        <td><?php echo isset($dat->nombres) ? htmlspecialchars($dat->nombres) : 'N/A'; ?></td>
+                                        <td><?php echo isset($dat->apellidos) ? htmlspecialchars($dat->apellidos) : 'N/A'; ?></td>
+                                        <td><?php echo isset($dat->grado) ? htmlspecialchars($dat->grado) : 'N/A'; ?></td>
+                                        <td><?php echo isset($dat->carrera) ? htmlspecialchars($dat->carrera) : 'N/A'; ?></td>
+                                        <td><?php echo isset($dat->nickname) ? htmlspecialchars($dat->nickname) : 'N/A'; ?></td>
+                                        <td>
+                                            <input type="number" name="notas[<?php echo htmlspecialchars($dat->id); ?>]" value="<?php echo isset($dat->notas) ? htmlspecialchars($dat->notas) : ''; ?>" min="1" max="100" required>
+                                        </td>
+                                        <td>
+                                            <button type="submit" class="btn btn-success">Actualizar</button>
+                                        </td>
+                                    </tr>
+                                    <?php
+                                }
+                            } else {
+                                echo "<tr><td colspan='8'>No se encontraron alumnos para esta carrera.</td></tr>";
+                            }
+                            ?>
+                        </tbody>
+                    </table>
+                    <input type="hidden" name="carrera" value="<?php echo htmlspecialchars($carrera); ?>">
+                </form>
+            </div>
         </div>
-    </div>
-</section><!-- /.content -->
+    </section><!-- /.content -->
+    <?php
+} else {
+    echo "No se ha seleccionado ninguna carrera.";
+} 
+?>
         </div>
         <!-- /.content-wrapper -->
 

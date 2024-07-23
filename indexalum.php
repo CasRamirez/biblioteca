@@ -1,9 +1,11 @@
 <?php
 session_start();
+include "conexion.php";
 if (!isset($_SESSION['username'])) {
     header("Location: index.php");
     exit();
 }
+$idalum = $_SESSION['id'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,16 +19,18 @@ if (!isset($_SESSION['username'])) {
     <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <style>
-        .image .img-circle {
-            width: 80px;
-            height: 80px;
-        }
-        .nickname {
-            color: purple;
-            font-weight: bold;
-        }
+    .image .img-circle {
+        width: 80px;
+        height: 80px;
+    }
+
+    .nickname {
+        color: purple;
+        font-weight: bold;
+    }
     </style>
 </head>
 
@@ -47,7 +51,8 @@ if (!isset($_SESSION['username'])) {
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
             <a href="index3.html" class="brand-link">
-                <img src="image/p.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8; width: 70px; height: 100px;">
+                <img src="image/p.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+                    style="opacity: .8; width: 70px; height: 100px;">
                 <span class="brand-text font-weight-light">REULAND</span>
             </a>
 
@@ -66,7 +71,8 @@ if (!isset($_SESSION['username'])) {
                 <!-- SidebarSearch Form -->
                 <div class="form-inline">
                     <div class="input-group" data-widget="sidebar-search">
-                        <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+                        <input class="form-control form-control-sidebar" type="search" placeholder="Search"
+                            aria-label="Search">
                         <div class="input-group-append">
                             <button class="btn btn-sidebar"><i class="fas fa-search fa-fw"></i></button>
                         </div>
@@ -75,7 +81,8 @@ if (!isset($_SESSION['username'])) {
 
                 <!-- Sidebar Menu -->
                 <nav class="mt-2">
-                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                        data-accordion="false">
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -97,7 +104,7 @@ if (!isset($_SESSION['username'])) {
                                         <p>Notas</p>
                                     </a>
                                 </li>
-                          
+
                                 <li class="nav-item">
                                     <a href="interfazcontra.php" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
@@ -137,46 +144,63 @@ if (!isset($_SESSION['username'])) {
                 </div><!-- /.container-fluid -->
             </section>
 
-            <!-- Main content -->
-            <section class="content">
-                <div class="card">
-                    <div class="card-body">
-                        <table id="example1" class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Nombre del Profesor</th>
-                                    <th scope="col">Apellido del Profesor</th>
-                                    <th scope="col">Curso</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                include "conexion.php";
-                                $sql = $conn->query("SELECT * FROM prof");
-                                while ($dat = $sql->fetch_object()) {
-                                ?>
-                                    <tr>
-                                        <td><?php echo isset($dat->id) ? $dat->id : 'N/A'; ?></td>
-                                        <td><?php echo isset($dat->nombres) ? $dat->nombres : 'N/A'; ?></td>
-                                        <td><?php echo isset($dat->apellidos) ? $dat->apellidos : 'N/A'; ?></td>
-                                        <td><?php echo isset($dat->materia) ? $dat->materia : 'N/A'; ?></td>
-                                    </tr>
-                                <?php
-                                }
-                                ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </section><!-- /.content -->
+           
+
+<!-- Main content -->
+<section class="content">
+    <div class="card">
+        <div class="card-body">
+        <?php
+
+$sqlsearch = $conn->query("SELECT carrera FROM alum WHERE id = '$idalum'");
+
+if ($sqlsearch->num_rows > 0) {
+    $resultado = $sqlsearch->fetch_assoc();
+    $carreraalum = $resultado['carrera'];
+    echo "Alumno de: " . $carreraalum;
+} else {
+    echo "No se encontraron resultados.";
+}
+
+?>
+            <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Nombre del Profesor</th>
+                        <th scope="col">Apellido del Profesor</th>
+                        <th scope="col">Curso</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    $sql = $conn->query("SELECT * FROM prof WHERE FIND_IN_SET('$carreraalum', carrera) > 0");
+                    while ($dat = $sql->fetch_object()) {
+                    ?>
+                        <tr>
+                            <td><?php echo isset($dat->id) ? $dat->id : 'N/A'; ?></td>
+                            <td><?php echo isset($dat->nombres) ? $dat->nombres : 'N/A'; ?></td>
+                            <td><?php echo isset($dat->apellidos) ? $dat->apellidos : 'N/A'; ?></td>
+                            <td><?php echo isset($dat->materia) ? $dat->materia : 'N/A'; ?></td>
+                        </tr>
+                    <?php
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section><!-- /.content -->
+
+
         </div><!-- /.content-wrapper -->
 
         <footer class="main-footer">
             <div class="float-right d-none d-sm-block">
                 <b>Versión</b> 1.0.0
             </div>
-            <strong>6to Computación &copy; 2024 <a href="https://adminlte.io">Emanuel y Daniel</a>.</strong> Mamitas Pluebla.
+            <strong>6to Computación &copy; 2024 <a href="https://adminlte.io">Emanuel y Daniel</a>.</strong> Mamitas
+            Pluebla.
         </footer>
     </div><!-- ./wrapper -->
 
@@ -199,14 +223,14 @@ if (!isset($_SESSION['username'])) {
     <script src="dist/js/demo.js"></script>
 
     <script>
-        $(function() {
-            $("#example1").DataTable({
-                "responsive": true,
-                "lengthChange": false,
-                "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-        });
+    $(function() {
+        $("#example1").DataTable({
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    });
     </script>
 </body>
 

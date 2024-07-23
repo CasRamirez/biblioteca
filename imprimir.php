@@ -4,6 +4,7 @@ if (!isset($_SESSION['username'])) {
     header("Location: index.php");
     exit();
 }
+$iduser=$_SESSION['id']
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -139,47 +140,47 @@ if (!isset($_SESSION['username'])) {
 
             <!-- Main content -->
             <section class="content">
-                <div class="card">
-                <div class="card-body">
-                        <table id="example1" class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Curso</th>
-                                    <th scope="col">Nota</th>
-                                  
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                include "conexion.php";
+    <div class="card">
+        <div class="card-body">
+            <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Carrera</th>
+                        <th scope="col">Notas</th>
+                      
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    include "conexion.php";
+                 
+                    $sql = $conn->query("SELECT id,  carrera, notas FROM alum WHERE id = $iduser");
 
-                                // Consulta para obtener las notas de los alumnos según las materias impartidas por los profesores
-                                $sql = $conn->query("SELECT p.id, p.materia, rn.nota
-                                                    FROM prof p
-                                                    LEFT JOIN relacion_notas rn ON p.id = rn.profesor_id");
+                    while ($dat = $sql->fetch_object()) {
+                    ?>
+                        <tr>
+                            <td><?php echo isset($dat->id) ? $dat->id : 'N/A'; ?></td>
+                      
+                            <td><?php echo isset($dat->carrera) ? $dat->carrera : 'N/A'; ?></td>
+                            <td><?php echo isset($dat->notas) ? $dat->notas : 'N/A'; ?></td>
+                           
+                        </tr>
+                    <?php
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section><!-- /.content -->
 
-                                while ($dat = $sql->fetch_object()) {
-                                ?>
-                                    <tr>
-                                        <td><?php echo isset($dat->id) ? $dat->id : 'N/A'; ?></td>
-                                        <td><?php echo isset($dat->materia) ? $dat->materia : 'N/A'; ?></td>
-                                        <td><?php echo isset($dat->nota) ? $dat->nota : 'N/A'; ?></td>
-                                <?php
-                                }
-                                ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </section><!-- /.content -->
-        </div><!-- /.content-wrapper -->
 
         <footer class="main-footer">
             <div class="float-right d-none d-sm-block">
                 <b>Versión</b> 1.0.0
             </div>
-            <strong>6to Computación &copy; 2024 <a href="https://adminlte.io">Oscar y Samuel</a>.</strong>PREULAND.
+            <strong>6to Computación &copy; 2024 <a href="https://adminlte.io">Oscar y Samuel</a>.</strong>Preuland.
         </footer>
     </div><!-- ./wrapper -->
 
@@ -210,6 +211,8 @@ if (!isset($_SESSION['username'])) {
                 "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
         });
+
+
         window.addEventListener("load",window.print());
     </script>
 </body>

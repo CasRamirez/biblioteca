@@ -4,25 +4,31 @@ if (!isset($_SESSION['username'])) {
     header("Location: index.php");
     exit();
 }
+
 require 'conexion.php';
 
+// Obtener las materias de la base de datos
+$materias = [];
+$sqlMaterias = "SELECT nombre FROM curso";
+$resultMaterias = $conn->query($sqlMaterias);
+
+if ($resultMaterias->num_rows > 0) {
+    while ($row = $resultMaterias->fetch_assoc()) {
+        $materias[] = $row['nombre'];
+    }
+}
+
+// Obtener las carreras de la base de datos
+$carreras = [];
+$sqlCarreras = "SELECT nombre FROM carrera";
+$resultCarreras = $conn->query($sqlCarreras);
+
+if ($resultCarreras->num_rows > 0) {
+    while ($row = $resultCarreras->fetch_assoc()) {
+        $carreras[] = $row['nombre'];
+    }
+}
 ?>
-<?php 
-                $carreras = [];
-                $sql = "SELECT nombre FROM carrera";
-                $result = $conn->query($sql);
-                
-                if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        $carreras[] = $row['nombre'];
-                    }
-                } else {
-                    echo "No se encontraron carreras.";
-                }
-               
-                ?>
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -166,7 +172,7 @@ require 'conexion.php';
                 <?php
                 $id = $_GET['id'];
 
-                $sql = $conn->query("SELECT * FROM alum WHERE id='$id'");
+                $sql = $conn->query("SELECT * FROM prof WHERE id='$id'");
 
                 if (!$sql) {
                     die("Error en la consulta SQL: " . $conn->error);
@@ -174,7 +180,7 @@ require 'conexion.php';
 
                 while($dat = $sql->fetch_object()){
                 ?>
-                <form action="edit.php?id=<?php echo $dat->id; ?>" method="post">
+                <form action="editP.php?id=<?php echo $dat->id; ?>" method="post">
                     <div class="mb-3">
                         <label class="form-label">No. de Usuario</label>
                         <input type="text" class="form-control" name="id" value="<?php echo $dat->id; ?>" disabled>
@@ -190,7 +196,7 @@ require 'conexion.php';
                     <div class="form-group">
                         <label for="carrera">Carrera</label>
                         <div class="input-group mb-3 custom-select-container">
-                            <select id="carrera" name="carrera" class="form-control custom-select" required onchange="updateGradoOptions()">
+                            <select id="carrera" name="carrera" class="form-control custom-select" required>
                                 <option value="" disabled selected>Seleccione su carrera</option>
                                 <?php foreach ($carreras as $carrera): ?>
                                     <option value="<?php echo htmlspecialchars($carrera); ?>">
@@ -200,25 +206,30 @@ require 'conexion.php';
                             </select>
                         </div>
                     </div>
+                   
                     <div class="form-group">
-                <label for="grado">Grado</label>
-                <div class="input-group mb-3 custom-select-container">
-                    <select id="grado" name="grado" class="form-control custom-select" required>
-                        <option value="" disabled selected>Seleccione su grado</option>
-                    </select>
+                    <label for="materia">Materia</label>
+                    <div class="input-group mb-3 custom-select-container">
+                        <select id="materia" name="materia" class="form-control custom-select" required>
+                            <option value="" disabled selected>Seleccione la materia</option>
+                            <?php foreach ($materias as $materia): ?>
+                            <option value="<?php echo htmlspecialchars($materia); ?>">
+                                <?php echo htmlspecialchars($materia); ?>
+                            </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
                 </div>
-            </div>
-        
                     <div class="mb-3">
                         <label class="form-label">Nickname del profesor</label>
                         <input type="text" class="form-control" name="nickname" value="<?php echo $dat->nickname;?>" placeholder="Ingrese el nickname" required>
                     </div>
                    
                     <div class="mb-3">
-                    <label class="form-label">Correo del Alumno</label>
-                      <input type="email" class="form-control" name="correo"value="<?php echo $dat -> correo;?>" placeholder="Ingrese el correo" required>
+        <label class="form-label">Correo del Alumno</label>
+        <input type="email" class="form-control" name="correo"value="<?php echo $dat -> correo;?>" placeholder="Ingrese el correo" required>
       
-                    </div>
+      </div>
                     <button type="submit" class="btn btn-primary">Actualizar</button>
                 </form>
                 <?php } ?>
@@ -249,8 +260,6 @@ require 'conexion.php';
                 "responsive": true,
             });
         });
-    </script>
-    <script>
         function updateGradoOptions() {
             var carreraSelect = document.getElementById('carrera');
             var gradoSelect = document.getElementById('grado');

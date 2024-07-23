@@ -1,22 +1,21 @@
 <?php
 session_start();
 $servername = "localhost";
-$username = "root"; // Cambia esto por tu usuario de MySQL
-$password = ""; // Cambia esto por tu contraseña de MySQL
+$username = "root";
+$password = "";
 $dbname = "cole";
 
-// Crear conexión
+
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Revisar conexión
+
 if ($conn->connect_error) {
     die("Conexión fallida: " . $conn->connect_error);
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST['username'];
-    $password = $_POST['password'];
-    $hashed_password = md5($password);
+    $password = md5($_POST['password']);
 
     $user_type = '';
     $redirect_page = '';
@@ -34,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($user_type !== '') {
         $table = $user_type;
-        $sql = "SELECT * FROM $table WHERE nickname='$username' AND contraseña='$hashed_password'";
+        $sql = "SELECT * FROM $table WHERE nickname='$username' AND contraseña='$password'";
         $result = $conn->query($sql);
 
         if ($result === false) {

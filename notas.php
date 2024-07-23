@@ -4,6 +4,7 @@ if (!isset($_SESSION['username'])) {
     header("Location: index.php");
     exit();
 }
+$iduser=$_SESSION['id']
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -139,43 +140,41 @@ if (!isset($_SESSION['username'])) {
 
             <!-- Main content -->
             <section class="content">
-                <div class="card">
-                <div class="card-body">
-                        <table id="example1" class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Curso</th>
-                                    <th scope="col">Nota</th>
-                                    <th scope="col">Imprimir notas</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                include "conexion.php";
+    <div class="card">
+        <div class="card-body">
+            <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Carrera</th>
+                        <th scope="col">Notas</th>
+                        <th scope="col">Imprimir notas</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    include "conexion.php";
+                 
+                    $sql = $conn->query("SELECT id,  carrera, notas FROM alum WHERE id = $iduser");
 
-                                // Consulta para obtener las notas de los alumnos según las materias impartidas por los profesores
-                                $sql = $conn->query("SELECT p.id, p.materia, rn.nota
-                                                    FROM prof p
-                                                    LEFT JOIN relacion_notas rn ON p.id = rn.profesor_id");
+                    while ($dat = $sql->fetch_object()) {
+                    ?>
+                        <tr>
+                            <td><?php echo isset($dat->id) ? $dat->id : 'N/A'; ?></td>
+                      
+                            <td><?php echo isset($dat->carrera) ? $dat->carrera : 'N/A'; ?></td>
+                            <td><?php echo isset($dat->notas) ? $dat->notas : 'N/A'; ?></td>
+                            <td><a href="imprimir.php?id=<?php echo $dat->id; ?>"target="_blank" class="btn btn-small btn-info"><i class="fas fa-print"></i></i></a></td>
+                        </tr>
+                    <?php
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section><!-- /.content -->
 
-                                while ($dat = $sql->fetch_object()) {
-                                ?>
-                                    <tr>
-                                        <td><?php echo isset($dat->id) ? $dat->id : 'N/A'; ?></td>
-                                        <td><?php echo isset($dat->materia) ? $dat->materia : 'N/A'; ?></td>
-                                        <td><?php echo isset($dat->nota) ? $dat->nota : 'N/A'; ?></td>
-                                        <td><a href="imprimir.php?id=<?php echo $dat->id; ?>"target="_blank" class="btn btn-small btn-info"><i class="fas fa-print"></i></i></a></td>
-                                    </tr>
-                                <?php
-                                }
-                                ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </section><!-- /.content -->
-        </div><!-- /.content-wrapper -->
 
         <footer class="main-footer">
             <div class="float-right d-none d-sm-block">

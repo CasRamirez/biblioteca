@@ -12,25 +12,26 @@ if (!isset($_SESSION['username'])) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>PreuLand</title>
-    
+
     <link rel="stylesheet" href="dist/css/adminlte.min.css?v=3.2.0">
     <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
     <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
     <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="dist/css/adminlte.min.css">
-    
+
     <!-- Estilo CSS para el color naranja -->
     <style>
-        .nickname {
-            color: orange;
-            font-weight: bold;
-        }
+    .nickname {
+        color: orange;
+        font-weight: bold;
+    }
     </style>
 </head>
 
@@ -50,7 +51,8 @@ if (!isset($_SESSION['username'])) {
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
             <a href="index3.html" class="brand-link">
-                <img src="image/p.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8; width: 70px; height: 100px;">
+                <img src="image/p.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+                    style="opacity: .8; width: 70px; height: 100px;">
                 <span class="brand-text font-weight-light">REULAND</span>
             </a>
             <!-- Sidebar -->
@@ -58,10 +60,10 @@ if (!isset($_SESSION['username'])) {
                 <!-- Sidebar user (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <style>
-                        .image .img-circle {
-                            width: 80px;
-                            height: 80px;
-                        }
+                    .image .img-circle {
+                        width: 80px;
+                        height: 80px;
+                    }
                     </style>
                     <div class="image">
                         <img src="image/auron.jpg" class="img-circle elevation-3" alt="User Image">
@@ -71,7 +73,8 @@ if (!isset($_SESSION['username'])) {
                 <!-- SidebarSearch Form -->
                 <div class="form-inline">
                     <div class="input-group" data-widget="sidebar-search">
-                        <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+                        <input class="form-control form-control-sidebar" type="search" placeholder="Search"
+                            aria-label="Search">
                         <div class="input-group-append">
                             <button class="btn btn-sidebar">
                                 <i class="fas fa-search fa-fw"></i>
@@ -81,7 +84,8 @@ if (!isset($_SESSION['username'])) {
                 </div>
                 <!-- Sidebar Menu -->
                 <nav class="mt-2">
-                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                        data-accordion="false">
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -110,6 +114,12 @@ if (!isset($_SESSION['username'])) {
                                     </a>
                                 </li>
                                 <li class="nav-item">
+                                    <a href="delete_reg.php" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Ver Eliminados</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
                                     <a href="interfazcontra.php" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Cambiar Contraseña</p>
@@ -129,9 +139,36 @@ if (!isset($_SESSION['username'])) {
             </div>
             <!-- /.sidebar -->
         </aside>
+        <!-- Modal -->
+        <div class="modal fade" id="reasonModal" tabindex="-1" aria-labelledby="reasonModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="reasonModalLabel">Razón de la eliminación</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="reasonForm">
+                            <div class="form-group">
+                                <label for="reason">Razón:</label>
+                                <input type="text" class="form-control" id="reason" required>
+                            </div>
+                            <input type="hidden" id="recordId">
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" id="submitReason">Enviar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
+
             <section class="content-header">
                 <div class="container-fluid">
                     <div class="row mb-2">
@@ -140,16 +177,15 @@ if (!isset($_SESSION['username'])) {
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item active">Estudiantes</li>
+                                <li class="breadcrumb-item active">Profesores</li>
                             </ol>
                         </div>
                     </div>
                 </div><!-- /.container-fluid -->
             </section>
-            <!-- Main content -->
             <section class="content">
                 <div class="card">
-                <div class="card-body">
+                    <div class="card-body">
                         <table id="example1" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
@@ -166,32 +202,29 @@ if (!isset($_SESSION['username'])) {
                             </thead>
                             <tbody>
                                 <?php
-                                include "conexion.php";
-                                $sql = $conn->query("SELECT * FROM prof");
-                                while ($dat = $sql->fetch_object()) {
+                                    include "conexion.php";
+                                    $sql = $conn->query("SELECT * FROM prof WHERE estado = 1");
+                                    while ($dat = $sql->fetch_object()) {
                                 ?>
-                                    <tr>
-                                        <td><?php echo isset($dat->id) ? $dat->id : 'N/A'; ?></td>
-                                        <td><?php echo isset($dat->nombres) ? $dat->nombres : 'N/A'; ?></td>
-                                        <td><?php echo isset($dat->apellidos) ? $dat->apellidos : 'N/A'; ?></td>
-                                        <td><?php echo isset($dat->carrera) ? $dat->carrera : 'N/A'; ?></td>
-                                        <td><?php echo isset($dat->materia) ? $dat->materia : 'N/A'; ?></td>
-                                        <td><?php echo isset($dat->nickname) ? $dat->nickname : 'N/A'; ?></td>
-                                        <td><?php echo isset($dat->correo) ? $dat->correo : 'N/A'; ?></td>
-                                        <td><a href="editar.php?id=<?php echo $dat->id; ?>" class="btn btn-small btn-warning"><i class="fas fa-edit"></i></a></td>
-                                        <td><a href="eliminar.php?id=<?php echo $dat->id; ?>" class="btn btn-small btn-danger"><i class="fas fa-trash-alt"></i></a></td>
-                                    </tr>
+                                <tr>
+                                    <td><?php echo isset($dat->id) ? $dat->id : 'N/A'; ?></td>
+                                    <td><?php echo isset($dat->nombres) ? $dat->nombres : 'N/A'; ?></td>
+                                    <td><?php echo isset($dat->apellidos) ? $dat->apellidos : 'N/A'; ?></td>
+                                    <td><?php echo isset($dat->carrera) ? $dat->carrera : 'N/A'; ?></td>
+                                    <td><?php echo isset($dat->materia) ? $dat->materia : 'N/A'; ?></td>
+                                    <td><?php echo isset($dat->nickname) ? $dat->nickname : 'N/A'; ?></td>
+                                    <td><?php echo isset($dat->correo) ? $dat->correo : 'N/A'; ?></td>
+                                    <td><a href="editarP.php?id=<?php echo $dat->id; ?>" class="btn btn-small btn-warning"><i class="fas fa-edit"></i></a></td>
+                                    <td><a href="eliminar.php?id=<?php echo $dat->id; ?>" class="btn btn-small btn-danger"><i class="fas fa-trash-alt"></i></a></td>
+                                </tr>
                                 <?php
-                                }
+                                    }
                                 ?>
                             </tbody>
                         </table>
                     </div>
-                    <!-- /.card-body -->
                 </div>
-                <!-- /.card -->
             </section>
-            <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->
         <footer class="main-footer">
@@ -207,6 +240,7 @@ if (!isset($_SESSION['username'])) {
         <!-- /.control-sidebar -->
     </div>
     <!-- ./wrapper -->
+
     <!-- jQuery -->
     <script src="plugins/jquery/jquery.min.js"></script>
     <!-- Bootstrap 4 -->
@@ -216,8 +250,6 @@ if (!isset($_SESSION['username'])) {
     <script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
     <script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
     <script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-   
-    <!-- DataTables Buttons -->
     <script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
     <script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
     <script src="plugins/jszip/jszip.min.js"></script>
@@ -226,20 +258,36 @@ if (!isset($_SESSION['username'])) {
     <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
     <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
     <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-    <!-- AdminLTE App -->
     <script src="dist/js/adminlte.min.js?v=3.2.0"></script>
-    <!-- AdminLTE for demo purposes -->
     <script src="dist/js/demo.js"></script>
-    <!-- Page specific script -->
     <script>
-        $(function () {
-            $("#example1").DataTable({
-                "responsive": true,
-                "lengthChange": false,
-                "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-        });
+    $(function() {
+        $("#example1").DataTable({
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    });
+    </script>
+        <script>
+    function confirmDelete(id) {
+        $('#recordId').val(id);
+        $('#reasonModal').modal('show');
+    }
+
+    $('#submitReason').click(function() {
+        var reason = $('#reason').val();
+        var id = $('#recordId').val();
+
+        if (reason) {
+
+            window.location.href = 'eliminar.php?id=' + id + '&reason=' + encodeURIComponent(reason);
+        } else {
+            alert('Por favor, proporciona una razón.');
+        }
+    });
     </script>
 </body>
+
 </html>

@@ -21,11 +21,11 @@ $tipoUsuario = $_POST['tipoUsuario'];
 $md5_contraseña = md5($contraseña);
 
 if ($tipoUsuario === 'alumno') {
-    $sql = "UPDATE alum SET contra = ?, contraseña = ? WHERE nickname = ?";
+    $sql = "UPDATE alum SET  contraseña = ? WHERE nickname = ?";
 } elseif ($tipoUsuario === 'profesor') {
-    $sql = "UPDATE prof SET contra = ?, contraseña = ? WHERE nickname = ?";
+    $sql = "UPDATE prof SET  contraseña = ? WHERE nickname = ?";
 } elseif ($tipoUsuario === 'administrador') {
-    $sql = "UPDATE adm SET contra = ?, contraseña = ? WHERE nickname = ?";
+    $sql = "UPDATE adm SET  contraseña = ? WHERE nickname = ?";
 } else {
     $response = array(
         'success' => false,
@@ -36,7 +36,7 @@ if ($tipoUsuario === 'alumno') {
 }
 
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("sss", $contraseña, $md5_contraseña, $nickname);
+$stmt->bind_param("ss", $md5_contraseña, $nickname);
 
 if ($stmt->execute()) {
     $response = array(

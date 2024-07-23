@@ -4,26 +4,7 @@ if (!isset($_SESSION['username'])) {
     header("Location: index.php");
     exit();
 }
-require 'conexion.php';
-
 ?>
-<?php 
-                $carreras = [];
-                $sql = "SELECT nombre FROM carrera";
-                $result = $conn->query($sql);
-                
-                if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        $carreras[] = $row['nombre'];
-                    }
-                } else {
-                    echo "No se encontraron carreras.";
-                }
-               
-                ?>
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -37,16 +18,23 @@ require 'conexion.php';
     <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+    <!-- Theme style -->
     <link rel="stylesheet" href="dist/css/adminlte.min.css">
 
+    <!-- Estilo CSS para el color naranja -->
     <style>
-        .nickname {
-            color: orange;
-            font-weight: bold;
-        }
+    .nickname {
+        color: orange;
+        font-weight: bold;
+    }
     </style>
 </head>
 
@@ -54,20 +42,25 @@ require 'conexion.php';
 
     <div class="wrapper">
         <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+            <!-- Left navbar links -->
             <ul class="navbar-nav">
                 <li class="nav-item">
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
             </ul>
         </nav>
-
+        <!-- Navbar -->
+        <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
+            <!-- Brand Logo -->
             <a href="index3.html" class="brand-link">
                 <img src="image/p.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
                     style="opacity: .8; width: 70px; height: 100px;">
                 <span class="brand-text font-weight-light">REULAND</span>
             </a>
+            <!-- Sidebar -->
             <div class="sidebar">
+                <!-- Sidebar user (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <style>
                     .image .img-circle {
@@ -80,6 +73,7 @@ require 'conexion.php';
                         <span class="nickname"><?php echo htmlspecialchars($_SESSION['nickname']); ?></span>
                     </div>
                 </div>
+                <!-- SidebarSearch Form -->
                 <div class="form-inline">
                     <div class="input-group" data-widget="sidebar-search">
                         <input class="form-control form-control-sidebar" type="search" placeholder="Search"
@@ -91,6 +85,7 @@ require 'conexion.php';
                         </div>
                     </div>
                 </div>
+                <!-- Sidebar Menu -->
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                         data-accordion="false">
@@ -103,6 +98,7 @@ require 'conexion.php';
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
+                        
                                 <li class="nav-item">
                                     <a href="indexadmin.php" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
@@ -121,12 +117,14 @@ require 'conexion.php';
                                         <p>Registrar</p>
                                     </a>
                                 </li>
+
                                 <li class="nav-item">
                                     <a href="delete_reg.php" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Ver Eliminados</p>
                                     </a>
                                 </li>
+
                                 <li class="nav-item">
                                     <a href="interfazcontra.php" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
@@ -143,10 +141,43 @@ require 'conexion.php';
                         </li>
                     </ul>
                 </nav>
+                <!-- /.sidebar-menu -->
             </div>
+            <!-- /.sidebar -->
         </aside>
+        <!-- Content Wrapper. Contains page content -->
+
+        <!-- alerta -->
+
+        <!-- Modal -->
+        <div class="modal fade" id="reasonModal" tabindex="-1" aria-labelledby="reasonModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="reasonModalLabel">Razón de la eliminación</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="reasonForm">
+                            <div class="form-group">
+                                <label for="reason">Razón:</label>
+                                <input type="text" class="form-control" id="reason" required>
+                            </div>
+                            <input type="hidden" id="recordId">
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" id="submitReason">Enviar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
             <section class="content-header">
                 <div class="container-fluid">
                     <div class="row mb-2">
@@ -159,122 +190,124 @@ require 'conexion.php';
                             </ol>
                         </div>
                     </div>
-                </div>
+                </div><!-- /.container-fluid -->
             </section>
-
+            <!-- Main content -->
             <section class="content">
-                <?php
-                $id = $_GET['id'];
-
-                $sql = $conn->query("SELECT * FROM alum WHERE id='$id'");
-
-                if (!$sql) {
-                    die("Error en la consulta SQL: " . $conn->error);
-                }
-
-                while($dat = $sql->fetch_object()){
-                ?>
-                <form action="edit.php?id=<?php echo $dat->id; ?>" method="post">
-                    <div class="mb-3">
-                        <label class="form-label">No. de Usuario</label>
-                        <input type="text" class="form-control" name="id" value="<?php echo $dat->id; ?>" disabled>
+                <div class="card">
+                    <div class="card-body">
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Apellido</th>
+                                    <th scope="col">Grado</th>
+                                    <th scope="col">Carrera</th>
+                                    <th scope="col">razon</th>
+                                  
+                                   
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                include "conexion.php";
+                                $sql = $conn->query("SELECT * FROM alum WHERE estado = 0");
+                                while ($dat = $sql->fetch_object()) {
+                                ?>
+                                <tr>
+                                    <td><?php echo isset($dat->id) ? $dat->id : 'N/A'; ?></td>
+                                    <td><?php echo isset($dat->nombres) ? $dat->nombres : 'N/A'; ?></td>
+                                    <td><?php echo isset($dat->apellidos) ? $dat->apellidos : 'N/A'; ?></td>
+                                    <td><?php echo isset($dat->grado) ? $dat->grado : 'N/A'; ?></td>
+                                    <td><?php echo isset($dat->carrera) ? $dat->carrera : 'N/A'; ?></td>
+                                    <td><?php echo isset($dat->razon) ? $dat->razon : 'N/A'; ?></td>
+                               
+                                   
+                                </tr>
+                                <?php
+                                }
+                                ?>
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Nombre del profesor</label>
-                        <input type="text" class="form-control" name="nombre" value="<?php echo $dat->nombres;?>" placeholder="Ingrese el nombre" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Apellido del profesor</label>
-                        <input type="text" class="form-control" name="apellido" value="<?php echo $dat->apellidos;?>" placeholder="Ingrese el apellido" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="carrera">Carrera</label>
-                        <div class="input-group mb-3 custom-select-container">
-                            <select id="carrera" name="carrera" class="form-control custom-select" required onchange="updateGradoOptions()">
-                                <option value="" disabled selected>Seleccione su carrera</option>
-                                <?php foreach ($carreras as $carrera): ?>
-                                    <option value="<?php echo htmlspecialchars($carrera); ?>">
-                                        <?php echo htmlspecialchars($carrera); ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                <label for="grado">Grado</label>
-                <div class="input-group mb-3 custom-select-container">
-                    <select id="grado" name="grado" class="form-control custom-select" required>
-                        <option value="" disabled selected>Seleccione su grado</option>
-                    </select>
+                    <!-- /.card-body -->
                 </div>
-            </div>
-        
-                    <div class="mb-3">
-                        <label class="form-label">Nickname del profesor</label>
-                        <input type="text" class="form-control" name="nickname" value="<?php echo $dat->nickname;?>" placeholder="Ingrese el nickname" required>
-                    </div>
-                   
-                    <div class="mb-3">
-                    <label class="form-label">Correo del Alumno</label>
-                      <input type="email" class="form-control" name="correo"value="<?php echo $dat -> correo;?>" placeholder="Ingrese el correo" required>
-      
-                    </div>
-                    <button type="submit" class="btn btn-primary">Actualizar</button>
-                </form>
-                <?php } ?>
+                <!-- /.card -->
             </section>
+            <!-- /.content -->
         </div>
+        <!-- /.content-wrapper -->
+        <footer class="main-footer">
+            <div class="float-right d-none d-sm-block">
+                <b>Version</b> 1.0.0
+            </div>
+            <strong>6to Computacion &copy; 2024 <a href="https://adminlte.io">Oscar y Samuel</a>.</strong> PREULAND.
+        </footer>
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
     </div>
 
+    <script>
+    function confirmDelete(id) {
+        $('#recordId').val(id);
+        $('#reasonModal').modal('show');
+    }
+
+    $('#submitReason').click(function() {
+        var reason = $('#reason').val();
+        var id = $('#recordId').val();
+
+        if (reason) {
+
+            window.location.href = 'eliminarA.php?id=' + id + '&reason=' + encodeURIComponent(reason);
+        } else {
+            alert('Por favor, proporciona una razón.');
+        }
+    });
+    </script>
+
+
+
+
     <script src="plugins/jquery/jquery.min.js"></script>
+
+
+    <!-- Bootstrap 4 -->
     <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- DataTables  & Plugins -->
     <script src="plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
     <script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
     <script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+
+    <!-- DataTables Buttons -->
     <script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
     <script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="plugins/jszip/jszip.min.js"></script>
+    <script src="plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <!-- AdminLTE App -->
     <script src="dist/js/adminlte.min.js?v=3.2.0"></script>
+    <!-- AdminLTE for demo purposes -->
     <script src="dist/js/demo.js"></script>
-
+    <!-- Page specific script -->
     <script>
-        $(function () {
-            $('#example1').DataTable({
-                "paging": true,
-                "lengthChange": false,
-                "searching": false,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true,
-            });
-        });
+    $(function() {
+        $("#example1").DataTable({
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    });
     </script>
-    <script>
-        function updateGradoOptions() {
-            var carreraSelect = document.getElementById('carrera');
-            var gradoSelect = document.getElementById('grado');
-            var selectedCarrera = carreraSelect.value;
-
-            // Limpiar las opciones actuales del select de grado
-            gradoSelect.innerHTML = '<option value="" disabled selected>Seleccione su grado</option>';
-
-            // Definir las opciones de grado
-            var gradosPrimaria = ['Primero', 'Segundo', 'Tercero', 'Cuarto', 'Quinto', 'Sexto'];
-            var gradosOtros = ['Primero', 'Segundo', 'Tercero'];
-
-            var grados = selectedCarrera.toLowerCase() === 'primaria' ? gradosPrimaria : gradosOtros;
-
-            // Agregar las nuevas opciones de grado
-            for (var i = 0; i < grados.length; i++) {
-                var option = document.createElement('option');
-                option.value = grados[i];
-                option.text = grados[i];
-                gradoSelect.add(option);
-            }
-        }
-    </script>
-   
 </body>
 
 </html>
