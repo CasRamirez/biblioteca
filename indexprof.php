@@ -71,6 +71,7 @@ $iduser = isset($_SESSION['id']) ? $_SESSION['id'] : 0;
                         <img src="image/willy.jpg" class="img-circle elevation-3" alt="User Image">
                         <span class="nickname">
                             <?php echo htmlspecialchars($_SESSION['nickname']); ?>
+                           
                         </span>
                     </div>
                 </div>
@@ -100,7 +101,7 @@ $iduser = isset($_SESSION['id']) ? $_SESSION['id'] : 0;
                             </a>
                             <ul class="nav nav-treeview">
 
-                   
+                           
                                 <li class="nav-item">
                                     <a href="indexprof.php" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
@@ -164,7 +165,7 @@ $iduser = isset($_SESSION['id']) ? $_SESSION['id'] : 0;
                                     <th scope="col">Apellido</th>
                                     <th scope="col">Grado</th>
                                     <th scope="col">Carrera</th>
-                                    <th scope="col">Nickname</th>
+                                   
                                 </tr>
                             </thead>
                             <tbody>
@@ -173,19 +174,46 @@ $iduser = isset($_SESSION['id']) ? $_SESSION['id'] : 0;
 
     // Asegúrate de que $iduser esté definido
     $iduser = isset($_SESSION['id']) ? $_SESSION['id'] : 0;
+    $grad = isset($_SESSION['grado']) ? $_SESSION['grado'] : 0;
+    $carr = isset($_SESSION['carrera']) ? $_SESSION['carrera'] : 0;
+
+    // Consulta a la tabla prof y carrera
+$sql = "SELECT pf.carrera, pf.grado,pf.materia, cr.nombre AS name_carrera
+FROM prof pf
+INNER JOIN carrera cr ON pf.carrera = cr.id
+WHERE pf.id = $iduser";
+$result = $conn->query($sql);
+
+// Verificar si hay resultados
+if ($result->num_rows > 0) {
+$row = $result->fetch_assoc();
+
+// Convertir el grado numérico a texto
+$grados = [
+1 => "Primero",
+2 => "Segundo",
+3 => "Tercero",
+4 => "Cuarto",
+5 => "Quinto",
+6 => "Sexto"
+];
+
+$grado_texto = isset($grados[$row['grado']]) ? $grados[$row['grado']] : "Grado Desconocido";
+$nombre_carrera = $row['name_carrera'];
+$materia_pro = $row['materia'];
+
+// Generar el H1
+echo "<h1>$grado_texto \ $nombre_carrera || Profesor de $materia_pro  </h1>";
+} else {
+echo "No se encontró el registro.";
+}
+
+
 
     // Verifica si $iduser está definido y es un número válido
     if ($iduser > 0) {
-        // Consulta para obtener la carrera del profesor
-        $prsql = $conn->query("SELECT carrera FROM prof WHERE id = $iduser");
-        if ($prsql && $prsql->num_rows > 0) {
-            $row = $prsql->fetch_assoc();
-            $carreraid = $row['carrera'];
-
-            echo "Profesor de : " . htmlspecialchars($carreraid);
-
             // Consulta para obtener los alumnos de la misma carrera utilizando FIND_IN_SET
-            $sql = $conn->query("SELECT * FROM alum WHERE FIND_IN_SET(carrera, '$carreraid') > 0");
+            $sql = $conn->query("SELECT am.id, am.nombres,am.carrera,am.grado,am.apellidos,cr.nombre FROM alum am INNER JOIN carrera cr ON am.carrera = cr.id WHERE carrera = $carr AND grado =$grad;");
             if ($sql) {
                 while ($dat = $sql->fetch_object()) {
                     ?>
@@ -194,8 +222,8 @@ $iduser = isset($_SESSION['id']) ? $_SESSION['id'] : 0;
                         <td><?php echo isset($dat->nombres) ? htmlspecialchars($dat->nombres) : 'N/A'; ?></td>
                         <td><?php echo isset($dat->apellidos) ? htmlspecialchars($dat->apellidos) : 'N/A'; ?></td>
                         <td><?php echo isset($dat->grado) ? htmlspecialchars($dat->grado) : 'N/A'; ?></td>
-                        <td><?php echo isset($dat->carrera) ? htmlspecialchars($dat->carrera) : 'N/A'; ?></td>
-                        <td><?php echo isset($dat->nickname) ? htmlspecialchars($dat->nickname) : 'N/A'; ?></td>
+                        <td><?php echo isset($dat->nombre) ? htmlspecialchars($dat->nombre) : 'N/A'; ?></td>
+                        
                     </tr>
                     <?php
                 }
@@ -205,9 +233,6 @@ $iduser = isset($_SESSION['id']) ? $_SESSION['id'] : 0;
         } else {
             echo "No se encontró ningún profesor con el ID proporcionado.";
         }
-    } else {
-        echo "ID de usuario no válido.";
-    }
 
     // Cerrar la conexión
     $conn->close();

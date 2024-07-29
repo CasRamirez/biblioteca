@@ -1,0 +1,47 @@
+@media print {
+    html, body {
+        height: auto;
+        margin: 0;
+        padding: 0;
+    }
+
+    .wrapper {
+        display: block;
+        height: auto;
+        min-height: auto;
+    }
+
+    .content-wrapper {
+        border: 5px solid #2196F3; /* Color del borde */
+        background-color: #ffffff;
+        padding: 20px;
+        margin: 10px;
+        max-width: none; /* Elimina el ancho máximo en impresión */
+        page-break-inside: avoid; /* Evita el salto de página dentro del contenido principal */
+    }
+
+    .card-body {
+        page-break-inside: avoid; /* Evita el salto de página dentro del contenido de la tarjeta */
+    }
+
+    .table {
+        page-break-inside: auto; /* Permite el salto de página dentro de la tabla si es necesario */
+    }
+
+    .table-bordered th,
+    .table-bordered td {
+        border: 1px solid #000 !important;
+        padding: 10px; /* Añade espacio interno */
+        text-align: left;
+        font-size: 12px; /* Ajusta el tamaño de la fuente si es necesario */
+    }
+
+    .main-footer {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        border-top: 1px solid #e3e6f0;
+        padding: 10px 20px;
+        text-align: center;
+    }
+}

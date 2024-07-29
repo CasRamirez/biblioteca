@@ -34,6 +34,9 @@ if (!isset($_SESSION['username'])) {
             color: orange;
             font-weight: bold;
         }
+        .text-center {
+            text-align: center;
+        }
     </style>
 </head>
 
@@ -201,6 +204,7 @@ if (!isset($_SESSION['username'])) {
                                 <th scope="col">Usuario</th>
                                 <th scope="col">Razón</th>
                                 <th scope="col">Eliminado por</th>
+                                <th scope="col" class="text-center">Activar</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -208,7 +212,6 @@ if (!isset($_SESSION['username'])) {
     include "conexion.php";
     $sql = $conn->query("
     
-  
     SELECT id, nombres, apellidos, grado, carrera, NULL AS materia, nickname, razon, user_delete 
     FROM alum 
     WHERE estado = 0
@@ -228,15 +231,15 @@ if (!isset($_SESSION['username'])) {
         echo "<td>" . htmlspecialchars($row['carrera']) . "</td>";
         echo "<td>" . htmlspecialchars($row['materia']) . "</td>";
         echo "<td>" . htmlspecialchars($row['nickname']) . "</td>";
-  
         echo "<td>" . htmlspecialchars($row['razon']) . "</td>";
         echo "<td>" . htmlspecialchars($row['user_delete']) . "</td>";
+        echo "<td class='text-center'><a href='activar.php?id=" . htmlspecialchars($row['id']) . "' class='btn btn-small btn-info'><i class='fas fa-plus'></i></a></td>";
         echo "</tr>";
+        
         $contador++;
     }
     ?>
                         </tbody>
-                     
                     </table>
                 </div>
             </div>

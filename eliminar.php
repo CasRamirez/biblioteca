@@ -12,7 +12,7 @@ if (isset($_GET['id']) && isset($_GET['reason']) && isset($_GET['nickname'])) {
 
     if ($sql->execute()) {
         // Redirigir a la página de administración después de la eliminación exitosa
-        header("Location: indexadmin.php");
+        header("Location: indexadminP.php");
         exit();
     } else {
         echo "Error actualizando el registro: " . $conn->error;

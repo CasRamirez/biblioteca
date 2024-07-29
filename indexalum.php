@@ -144,25 +144,32 @@ $idalum = $_SESSION['id'];
                 </div><!-- /.container-fluid -->
             </section>
 
-           
+            <?php
+                $iduser = isset($_SESSION['id']) ? $_SESSION['id'] : 0;
+                $grad = isset($_SESSION['grado']) ? $_SESSION['grado'] : 0;
+                $carr = isset($_SESSION['carrera']) ? $_SESSION['carrera'] : 0;
 
-<!-- Main content -->
-<section class="content">
-    <div class="card">
-        <div class="card-body">
-        <?php
 
-$sqlsearch = $conn->query("SELECT carrera FROM alum WHERE id = '$idalum'");
+$sqlsearch = $conn->query("SELECT am.carrera,
+ca.nombre
+ FROM  alum am
+INNER JOIN carrera ca ON am.id = ca.id
+ WHERE am.id = $iduser ");
 
 if ($sqlsearch->num_rows > 0) {
     $resultado = $sqlsearch->fetch_assoc();
-    $carreraalum = $resultado['carrera'];
-    echo "Alumno de: " . $carreraalum;
+    $carreraalum = $resultado['nombre'];
+    echo "<h1> Alumno de " . htmlspecialchars($carreraalum) . "</h1>";
 } else {
     echo "No se encontraron resultados.";
 }
 
 ?>
+
+<!-- Main content -->
+<section class="content">
+    <div class="card">
+        <div class="card-body">
             <table id="example1" class="table table-bordered table-striped">
                 <thead>
                     <tr>
@@ -174,7 +181,7 @@ if ($sqlsearch->num_rows > 0) {
                 </thead>
                 <tbody>
                     <?php
-                    $sql = $conn->query("SELECT * FROM prof WHERE FIND_IN_SET('$carreraalum', carrera) > 0");
+                    $sql = $conn->query("SELECT * FROM prof WHERE  grado = $grad AND carrera =$carr");
                     while ($dat = $sql->fetch_object()) {
                     ?>
                         <tr>

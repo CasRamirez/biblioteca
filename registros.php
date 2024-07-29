@@ -4,6 +4,7 @@
 session_start();
 require 'conexion.php';
 ?>
+
 <?php 
                 $carreras = [];
                 $sql = "SELECT nombre FROM carrera";
@@ -97,7 +98,13 @@ require 'conexion.php';
         <div class="form-container register-container">
             <form id="formAlumno" action="registroP.php" method="post">
                 <h1>Registro de Alumnos</h1>
-              
+                <?php
+                if (isset($_GET['error']) && $_GET['tipo'] === 'alumno') {
+                    echo "<div class='alert alert-danger' role='alert'>";
+                    echo $_GET['error'];
+                    echo "</div>";
+                }
+                ?>
                 <input type="hidden" name="tipo" value="alumno">
                 <div class="input-group mb-3">
                     <input type="text" name="nombre" class="form-control" placeholder="Ingrese nombre" required>
@@ -107,29 +114,51 @@ require 'conexion.php';
                 </div>
 
 
-                  <!-- Select para carrera -->
-            <div class="form-group">
-                <label for="carrera">Carrera</label>
-                <div class="input-group mb-3 custom-select-container">
-                    <select id="carrera" name="carrera" class="form-control custom-select" required onchange="updateGradoOptions()">
-                        <option value="" disabled selected>Seleccione su carrera</option>
-                        <?php foreach ($carreras as $carrera): ?>
-                        <option value="<?php echo htmlspecialchars($carrera); ?>">
-                            <?php echo htmlspecialchars($carrera); ?>
-                        </option>
-                        <?php endforeach; ?>
-                    </select>
+
+                <?php
+
+
+
+                    if ($conn->connect_error) {
+                        die("Error de conexión: " . $conn->connect_error);
+                    }
+                    $sql = "SELECT id, nombre FROM carrera";
+                    $result = $conn->query($sql);
+
+                    if ($result->num_rows > 0) {
+                        echo '<div class="form-group">';
+                        echo '    <label for="carrera">Carrera</label>';
+                        echo '    <div class="input-group mb-3 custom-select-container">';
+                        echo '        <select id="carrera" name="carrera" class="form-control custom-select" required>';
+                        echo '            <option value="" disabled selected>Seleccione su carrera</option>';
+                        
+                        while ($row = $result->fetch_assoc()) {
+                            echo '            <option value="' . $row['id'] . '">' . $row['nombre'] . '</option>';
+                        }
+                        
+                        echo '        </select>';
+                        echo '    </div>';
+                        echo '</div>';
+                    } else {
+                        echo "No se encontraron carreras.";
+                    }
+                    ?>
+
+                <!-- Select para grado -->
+                <div class="form-group">
+                    <label for="grado">Grado</label>
+                    <div class="input-group mb-3 custom-select-container">
+                        <select id="grado" name="grado" class="form-control custom-select" required>
+                            <option value="" selected>Seleccione su grado</option>
+                            <option value="1">Primero</option>
+                            <option value="2">Segundo</option>
+                            <option value="3">Tercero</option>
+                            <option value="4">Cuarto</option>
+                            <option value="5">Quinto</option>
+                            <option value="6">Sexto</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
-            <!-- Select para grado -->
-            <div class="form-group">
-                <label for="grado">Grado</label>
-                <div class="input-group mb-3 custom-select-container">
-                    <select id="grado" name="grado" class="form-control custom-select" required>
-                        <option value="" disabled selected>Seleccione su grado</option>
-                    </select>
-                </div>
-            </div>
 
 
                 <div class="input-group mb-3">
@@ -153,10 +182,24 @@ require 'conexion.php';
                 </div>
             </form>
         </div>
+
+
+        <!-- REGION PROFESORESS -->
+        <!-- REGISTROS DE PROFEOSRES -->
+
+
+
+
         <div class="form-container login-container">
             <form id="formDocente" action="registroP.php" method="post">
                 <h1>Registro de Profesores</h1>
-                
+                <?php
+                if (isset($_GET['error']) && $_GET['tipo'] === 'docente') {
+                    echo "<div class='alert alert-danger' role='alert'>";
+                    echo $_GET['error'];
+                    echo "</div>";
+                }
+                ?>
                 <input type="hidden" name="tipo" value="docente">
                 <div class="input-group mb-3">
                     <input type="text" name="nombre" class="form-control" placeholder="Ingrese su nombre completo"
@@ -169,24 +212,54 @@ require 'conexion.php';
 
 
 
+                <?php
+
+
+
+if ($conn->connect_error) {
+    die("Error de conexión: " . $conn->connect_error);
+}
+$sql = "SELECT id, nombre FROM carrera";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    echo '<div class="form-group">';
+    echo '    <label for="carrera">Carrera</label>';
+    echo '    <div class="input-group mb-3 custom-select-container">';
+    echo '        <select id="carrera" name="carrera" class="form-control custom-select" required>';
+    echo '            <option value="" disabled selected>Seleccione su carrera</option>';
+    
+    while ($row = $result->fetch_assoc()) {
+        echo '            <option value="' . $row['id'] . '">' . $row['nombre'] . '</option>';
+    }
+    
+    echo '        </select>';
+    echo '    </div>';
+    echo '</div>';
+} else {
+    echo "No se encontraron carreras.";
+}
+?>
+
+                <!-- Select para grado -->
                 <div class="form-group">
-                    <label for="carrera">Carrera</label>
+                    <label for="grado">Grado</label>
                     <div class="input-group mb-3 custom-select-container">
-                        <select id="carrera" name="carrera" class="form-control custom-select" required>
-                            <option value="" disabled selected>Seleccione su carrera</option>
-                            <?php foreach ($carreras as $carrera): ?>
-                            <option value="<?php echo htmlspecialchars($carrera); ?>">
-                                <?php echo htmlspecialchars($carrera); ?>
-                            </option>
-                            <?php endforeach; ?>
+                        <select id="grado" name="grado" class="form-control custom-select" required>
+                            <option value="" selected>Seleccione su grado</option>
+                            <option value="1">Primero</option>
+                            <option value="2">Segundo</option>
+                            <option value="3">Tercero</option>
+                            <option value="4">Cuarto</option>
+                            <option value="5">Quinto</option>
+                            <option value="6">Sexto</option>
                         </select>
                     </div>
                 </div>
 
-
                 <?php 
             $materias = [];
-            $sql = "SELECT nombre FROM curso";
+            $sql = "SELECT nombre FROM cursos";
             $result = $conn->query($sql);
             
             if ($result->num_rows > 0) {
@@ -236,13 +309,6 @@ require 'conexion.php';
             <div class="overlay">
                 <div class="overlay-panel overlay-left">
                     <h1 class="title">Registro de Alumnos</h1>
-                    <?php
-                if (isset($_GET['error']) && $_GET['tipo'] === 'alumno') {
-                    echo "<div class='alert alert-danger' role='alert'>";
-                    echo $_GET['error'];
-                    echo "</div>";
-                }
-                ?>
                     <p></p>
                     <button class="ghost" id="login">Registro de Profesores
                         <i class="lni lni-arrow-left login"></i>
@@ -263,15 +329,11 @@ require 'conexion.php';
                     </div>
                 </div>
 
+
+
+
                 <div class="overlay-panel overlay-right">
                     <h1 class="title">Registro de Profesores</h1>
-                    <?php
-                if (isset($_GET['error']) && $_GET['tipo'] === 'docente') {
-                    echo "<div class='alert alert-danger' role='alert'>";
-                    echo $_GET['error'];
-                    echo "</div>";
-                }
-                ?>
                     <p></p>
                     <button class="ghost" id="register">Registro de Alumnos
                         <i class="lni lni-arrow-right register"></i>
@@ -306,33 +368,31 @@ require 'conexion.php';
             input.setSelectionRange(lastIndexOfSuffix + suffix.length + 1, lastIndexOfSuffix + suffix.length + 1);
         }
     }
-
-    
     </script>
 
-<script>
-        function updateGradoOptions() {
-            var carreraSelect = document.getElementById('carrera');
-            var gradoSelect = document.getElementById('grado');
-            var selectedCarrera = carreraSelect.value;
+    <script>
+    function updateGradoOptions() {
+        var carreraSelect = document.getElementById('carrera');
+        var gradoSelect = document.getElementById('grado');
+        var selectedCarrera = carreraSelect.value;
 
-            // Limpiar las opciones actuales del select de grado
-            gradoSelect.innerHTML = '<option value="" disabled selected>Seleccione su grado</option>';
+        // Limpiar las opciones actuales del select de grado
+        gradoSelect.innerHTML = '<option value="" disabled selected>Seleccione su grado</option>';
 
-            // Definir las opciones de grado
-            var gradosPrimaria = ['Primero', 'Segundo', 'Tercero', 'Cuarto', 'Quinto', 'Sexto'];
-            var gradosOtros = ['Primero', 'Segundo', 'Tercero'];
+        // Definir las opciones de grado
+        var gradosPrimaria = ['Primero', 'Segundo', 'Tercero', 'Cuarto', 'Quinto', 'Sexto'];
+        var gradosOtros = ['Primero', 'Segundo', 'Tercero'];
 
-            var grados = selectedCarrera.toLowerCase() === 'primaria' ? gradosPrimaria : gradosOtros;
+        var grados = selectedCarrera.toLowerCase() === 'primaria' ? gradosPrimaria : gradosOtros;
 
-            // Agregar las nuevas opciones de grado
-            for (var i = 0; i < grados.length; i++) {
-                var option = document.createElement('option');
-                option.value = grados[i];
-                option.text = grados[i];
-                gradoSelect.add(option);
-            }
+        // Agregar las nuevas opciones de grado
+        for (var i = 0; i < grados.length; i++) {
+            var option = document.createElement('option');
+            option.value = grados[i];
+            option.text = grados[i];
+            gradoSelect.add(option);
         }
+    }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">

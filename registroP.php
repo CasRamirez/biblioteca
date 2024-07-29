@@ -1,27 +1,14 @@
 <?php
-// Conexión a la base de datos
 $servername = "localhost";
 $username = "root";
 $password = "";
 $dbname = "cole";
 
-// Crear conexión
 $conn = new mysqli($servername, $username, $password, $dbname);
-
-// Verificar conexión
 if ($conn->connect_error) {
     die("Conexión fallida: " . $conn->connect_error);
 }
 
-// Función para verificar si el nickname ya existe
-function nicknameExists($conn, $nickname, $table) {
-    $sql = "SELECT COUNT(*) as count FROM $table WHERE nickname = '$nickname'";
-    $result = $conn->query($sql);
-    $row = $result->fetch_assoc();
-    return $row['count'] > 0;
-}
-
-// Verificar el tipo de usuario (alumno o profesor)
 if ($_POST['tipo'] == 'alumno') {
     $nombre = $_POST['nombre'];
     $apellido = $_POST['apellido'];
@@ -31,25 +18,35 @@ if ($_POST['tipo'] == 'alumno') {
     $correo = $_POST['correo'];
     $contraseña = $_POST['contraseña'];
 
-    // Verificar si el nickname ya existe en la tabla de alumnos
-    if (nicknameExists($conn, $nickname, 'alum')) {
-        header('Location: registros.php?error=Este usuario ya existe&tipo=alumno');
-        exit();
-    }
+    // Usar password_hash para hashear la contraseña
+    $hashed_password = password_hash($contraseña, PASSWORD_DEFAULT);
 
-    // Encriptar la contraseña con MD5 (no recomendado)
-    $hashed_password = md5($contraseña);
-    
-    // Insertar datos en la tabla de alumnos
-    $sql = "INSERT INTO alum (nombres, apellidos, carrera, grado, nickname, correo, contraseña, FKGrado, FkCarrera, estado) 
-            VALUES ('$nombre', '$apellido', '$carrera', '$grado', '$nickname', '$correo', '$hashed_password', '$grado', '$carrera','1')";
+    // Insertar el nuevo alumno en la tabla 'alum'
+    $sql = "INSERT INTO alum (nombres, apellidos, carrera, grado, nickname, correo, contraseña, estado, FKGrado, FkCarrera) 
+            VALUES ('$nombre', '$apellido', '$carrera', '$grado', '$nickname', '$correo', '$hashed_password', 1, '$grado', '$carrera')";
 
     if ($conn->query($sql) === TRUE) {
-        header('Location: index.php?success=Registro exitoso&tipo=alumno');
-        exit();
+        // Obtener el ID del nuevo alumno
+        $id_alum = $conn->insert_id;
+
+        // Obtener todos los IDs de los cursos
+        $sql_cursos = "SELECT id FROM cursos";
+        $result_cursos = $conn->query($sql_cursos);
+
+        if ($result_cursos->num_rows > 0) {
+            while ($row_curso = $result_cursos->fetch_assoc()) {
+                $id_curso = $row_curso['id'];
+
+                // Insertar un registro en la tabla 'notas' para cada curso
+                $sql_notas = "INSERT INTO notas (id_alum, carrera, id_curso, nota) 
+                              VALUES ('$id_alum', '$carrera', '$id_curso', 0)";
+                $conn->query($sql_notas);
+            }
+        }
+
+        echo "Registro exitoso";
     } else {
-        header('Location: registros.php?error=Error al registrar&tipo=alumno');
-        exit();
+        echo "Error: " . $sql . "<br>" . $conn->error;
     }
 
 } elseif ($_POST['tipo'] == 'docente') {
@@ -57,28 +54,24 @@ if ($_POST['tipo'] == 'alumno') {
     $apellido = $_POST['apellido'];
     $carrera = $_POST['carrera'];
     $materia = $_POST['materia'];
+    $grado = $_POST['grado'];
     $nickname = $_POST['nickname'];
     $correo = $_POST['correo'];
     $contraseña = $_POST['contraseña'];
 
-    // Verificar si el nickname ya existe en la tabla de profesores
-    if (nicknameExists($conn, $nickname, 'prof')) {
-        header('Location: registros.php?error=Este usuario ya existe&tipo=docente');
-        exit();
-    }
+    // Usar password_hash para hashear la contraseña
+    $hashed_password = password_hash($contraseña, PASSWORD_DEFAULT);
 
-    // Encriptar la contraseña con MD5 (no recomendado)
-    $hashed_password = md5($contraseña);
-
-    // Insertar datos en la tabla de profesores
-    $sql = "INSERT INTO prof (nombres, apellidos, carrera, materia, nickname, correo, contraseña,estado) 
-            VALUES ('$nombre', '$apellido', '$carrera', '$materia', '$nickname', '$correo', '$hashed_password','1')";
+    // Incluir el campo 'estado' con el valor por defecto 1
+    $sql = "INSERT INTO prof (nombres, apellidos, carrera, materia, grado, nickname, correo, contraseña, estado) 
+            VALUES ('$nombre', '$apellido', '$carrera', '$materia', '$grado', '$nickname', '$correo', '$hashed_password', 1)";
 
     if ($conn->query($sql) === TRUE) {
-        header('Location: index.php?success=Registro exitoso&tipo=docente');
+        header('Location: index.php?success=Registro exitoso');
         exit();
     } else {
-        header('Location: registros.php?error=Error al registrar&tipo=docente');
+        echo "Error: " . $conn->error; // Agregado para depuración
+        header('Location: index.php?error=Error al registrar');
         exit();
     }
 }

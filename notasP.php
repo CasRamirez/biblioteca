@@ -145,63 +145,149 @@ $iduser = isset($_SESSION['id']) ? $_SESSION['id'] : 0;
                 </div><!-- /.container-fluid -->
             </section>
 
+<?php
+ $matr = isset($_SESSION['materia']) ? $_SESSION['materia'] : 0;
+ echo $matr ;
+  include "conexion.php";
 
+  // Asegúrate de que $iduser esté definido
+  $iduser = isset($_SESSION['id']) ? $_SESSION['id'] : 0;
+  $grad = isset($_SESSION['grado']) ? $_SESSION['grado'] : 0;
+  $carr = isset($_SESSION['carrera']) ? $_SESSION['carrera'] : 0;
+  echo $carr;
+  // Consulta a la tabla prof y carrera
+$sql = "SELECT pf.carrera, pf.grado,pf.materia, cr.nombre AS name_carrera
+FROM prof pf
+INNER JOIN carrera cr ON pf.carrera = cr.id
+WHERE pf.id = $iduser";
+$result = $conn->query($sql);
 
-<!-- Main content -->
-<section class="content">
+// Verificar si hay resultados
+if ($result->num_rows > 0) {
+$row = $result->fetch_assoc();
+
+// Convertir el grado numérico a texto
+$grados = [
+1 => "Primero",
+2 => "Segundo",
+3 => "Tercero",
+4 => "Cuarto",
+5 => "Quinto",
+6 => "Sexto"
+];
+
+$grado_texto = isset($grados[$row['grado']]) ? $grados[$row['grado']] : "Grado Desconocido";
+$nombre_carrera = $row['name_carrera'];
+$materia_pro = $row['materia'];
+
+// Generar el H1
+echo "<h1>$grado_texto \ $nombre_carrera || Profesor de $materia_pro  </h1>";
+} else {
+echo "No se encontró el registro.";
+}
+
+if ($conn->connect_error) {
+    die("Error de conexión: " . $conn->connect_error);
+}
+
+if ($conn->connect_error) {
+    die("Error de conexión: " . $conn->connect_error);
+}
+
+// Procesar el formulario de actualización de notas
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_nota'])) {
+    $id_alum = $_POST['id_alum'];
+    $id_curso = $_POST['id_curso'];
+    $nota = $_POST['nota'];
     
-    <div class="card">
-        
-        <div class="card-body">
-        <?php
-if ($iduser > 0) {
-    // Consulta para obtener la carrera del profesor
-    $prsql = $conn->query("SELECT carrera FROM prof WHERE id = $iduser");
-    if ($prsql && $prsql->num_rows > 0) {
-        $row = $prsql->fetch_assoc();
-        $carreraid = $row['carrera'];
-
-        // Dividir la cadena de carreras en un array
-        $carreras = explode(',', $carreraid);
-        // Eliminar duplicados
-        $carreras = array_unique($carreras);
-
-        echo "Profesor de : " . htmlspecialchars(implode(', ', $carreras));
+    $update_sql = "UPDATE notas SET nota = ? WHERE id_alum = ? AND id_curso = ?";
+    $stmt = $conn->prepare($update_sql);
+    $stmt->bind_param('dii', $nota, $id_alum, $id_curso);
+    
+    if ($stmt->execute()) {
+        echo "Nota actualizada correctamente.";
+    } else {
+        echo "Error al actualizar la nota: " . $conn->error;
     }
 }
-?>
+
+
+
+// Consulta a la tabla notas
+$sql = "SELECT 
+    am.nombres,
+    am.apellidos,
+    ns.id_alum,
+    ns.carrera,
+    am.grado,
+    ns.id_curso,
+    cs.nombre AS nombre_curso,
+    ns.nota
+FROM
+    notas ns
+    INNER JOIN alum am ON ns.id_alum = am.id
+    INNER JOIN cursos cs ON ns.id_curso = cs.id
+WHERE
+    cs.nombre = '$matr' AND ns.carrera = $carr AND am.grado = $grad";
+$result = $conn->query($sql);
+
+// Generar el HTML de la tabla
+$html = '
+<section class="content">
+    <div class="card">
+        <div class="card-body">
             <table id="example1" class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th scope="col">#</th>
                         <th scope="col">Nombre</th>
-                        <th scope="col">Ver Alumnos</th>
+                        <th scope="col">Apellido</th>
+                        <th scope="col">Curso</th>
+                        <th scope="col">Notas</th>
+                        <th scope="col">Acción</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <?php
-                    if (isset($carreras) && count($carreras) > 0) {
-                        foreach ($carreras as $carrera) {
-                            $carrera = trim($carrera); // Elimina espacios adicionales
-                            ?>
-                            <tr>
-                                <td><?php echo htmlspecialchars($carrera); ?></td>
-                                <td><?php echo htmlspecialchars($carrera); ?></td>
-                                <td>
-                                    <a href="ver_alumnos.php?carrera=<?php echo urlencode($carrera); ?>" class="btn btn-primary">Ver</a>
-                                </td>
-                            </tr>
-                            <?php
-                        }
-                    } else {
-                        echo "<tr><td colspan='3'>No hay carreras disponibles.</td></tr>";
-                    }
-                    ?>
+                <tbody>';
+
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $html .= '
+                    <tr>
+                        <form method="post" action="">
+                            <td>' . htmlspecialchars($row['nombres']) . '</td>
+                            <td>' . htmlspecialchars($row['apellidos']) . '</td>
+                            <td>' . htmlspecialchars($row['nombre_curso']) . '</td>
+                            <td>
+                                <input type="number" name="nota" value="' . htmlspecialchars($row['nota']) . '" step="0.01" min="0" max="100" required>
+                                <input type="hidden" name="id_alum" value="' . htmlspecialchars($row['id_alum']) . '">
+                                <input type="hidden" name="id_curso" value="' . htmlspecialchars($row['id_curso']) . '">
+                            </td>
+                            <td>
+                                <button type="submit" name="update_nota" class="btn btn-primary">Actualizar</button>
+                            </td>
+                        </form>
+                    </tr>';
+    }
+} else {
+    $html .= '
+                    <tr>
+                        <td colspan="5">No se encontraron registros.</td>
+                    </tr>';
+}
+
+$html .= '
                 </tbody>
             </table>
         </div>
     </div>
-</section><!-- /.content -->
+</section>';
+
+// Mostrar el HTML generado
+echo $html;
+
+// Cerrar la conexión
+$conn->close();
+?>
+
         </div>
         <!-- /.content-wrapper -->
 

@@ -206,7 +206,7 @@ if (!isset($_SESSION['username'])) {
                                     <th scope="col">Carrera</th>
                                     <th scope="col">Nickname</th>
                                     <th scope="col">Correo</th>
-                                    <th scope="col">Notas</th>
+                                    
                                     <th scope="col">Editar</th>
                                     <th scope="col">Borrar</th>
                                 </tr>
@@ -225,7 +225,7 @@ if (!isset($_SESSION['username'])) {
                                     <td><?php echo isset($dat->carrera) ? $dat->carrera : 'N/A'; ?></td>
                                     <td><?php echo isset($dat->nickname) ? $dat->nickname : 'N/A'; ?></td>
                                     <td><?php echo isset($dat->correo) ? $dat->correo : 'N/A'; ?></td>
-                                    <td><?php echo isset($dat->notas) ? $dat->notas : 'N/A'; ?></td>
+                                 
                                     <td><a href="editar.php?id=<?php echo $dat->id; ?>"
                                             class="btn btn-small btn-warning"><i class="fas fa-edit"></i></a></td>
                                     <td><a href="javascript:void(0);"
