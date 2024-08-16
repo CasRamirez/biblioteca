@@ -3,7 +3,7 @@ session_start();
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "cole";
+$dbname = "bibli";
 
 // Crear conexión
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -21,12 +21,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $redirect_page = '';
 
     // Determinar el tipo de usuario basado en el nombre de usuario
-    if (strpos($username, '-alum') !== false) {
-        $user_type = 'alum';
-        $redirect_page = 'indexalum.php';
-    } elseif (strpos($username, '-prof') !== false) {
-        $user_type = 'prof';
-        $redirect_page = 'indexprof.php';
+    if (strpos($username, '-cliente') !== false) {
+        $user_type = 'cliente';
+        $redirect_page = 'indexcliente.php';
+    } elseif (strpos($username, '-empleado') !== false) {
+        $user_type = 'empleado';
+        $redirect_page = 'indexempleado.php';
     } elseif (strpos($username, '-admin') !== false) {
         $user_type = 'adm';
         $redirect_page = 'registros.php';
@@ -42,22 +42,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
-            $stored_hashed_password = $row['contraseña'];
+            $stored_hashed_password = $row['contra'];
 
             // Verificar la contraseña encriptada
             if (password_verify($password, $stored_hashed_password)) {
                 // Configurar variables de sesión
                 $_SESSION['username'] = $username;
                 $_SESSION['nickname'] = $row['nickname'];
-                $_SESSION['nombres'] = $row['nombres'];
-                $_SESSION['apellidos'] = $row['apellidos'];
+                $_SESSION['nombre'] = $row['nombre'];
+                $_SESSION['apellido'] = $row['apellido'];
                 $_SESSION['correo'] = $row['correo'];
-                if ($user_type === 'alum') {
-                    $_SESSION['carrera'] = $row['carrera'];
-                    $_SESSION['grado'] = $row['grado'];
-                } elseif ($user_type === 'prof') {
-                    $_SESSION['carrera'] = $row['carrera']; // Asumiendo que los docentes también tienen 'carrera'
-                }
                 $_SESSION['id'] = $row['id'];
                 header("Location: $redirect_page");
                 exit();

@@ -17,15 +17,16 @@ $contraseña = $_POST['contraseña'];
 $nickname = $_POST['nickname'];
 $tipoUsuario = $_POST['tipoUsuario'];
 
-// Encriptar la contraseña usando MD5
-$md5_contraseña = md5($contraseña);
+// Encriptar la contraseña usando SHA-256 con una clave secreta
+$secret_key = "clave89111";
+$hashed_password = hash('sha256', $secret_key . $contraseña);
 
 if ($tipoUsuario === 'alumno') {
-    $sql = "UPDATE alum SET  contraseña = ? WHERE nickname = ?";
+    $sql = "UPDATE alum SET contraseña = ? WHERE nickname = ?";
 } elseif ($tipoUsuario === 'profesor') {
-    $sql = "UPDATE prof SET  contraseña = ? WHERE nickname = ?";
+    $sql = "UPDATE prof SET contraseña = ? WHERE nickname = ?";
 } elseif ($tipoUsuario === 'administrador') {
-    $sql = "UPDATE adm SET  contraseña = ? WHERE nickname = ?";
+    $sql = "UPDATE adm SET contraseña = ? WHERE nickname = ?";
 } else {
     $response = array(
         'success' => false,
@@ -36,7 +37,7 @@ if ($tipoUsuario === 'alumno') {
 }
 
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("ss", $md5_contraseña, $nickname);
+$stmt->bind_param("ss", $hashed_password, $nickname);
 
 if ($stmt->execute()) {
     $response = array(

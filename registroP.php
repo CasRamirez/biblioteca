@@ -2,75 +2,86 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "cole";
+$dbname = "bibli";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Conexión fallida: " . $conn->connect_error);
 }
 
-if ($_POST['tipo'] == 'alumno') {
-    $nombre = $_POST['nombre'];
-    $apellido = $_POST['apellido'];
-    $carrera = $_POST['carrera'];
-    $grado = $_POST['grado'];
-    $nickname = $_POST['nickname'];
-    $correo = $_POST['correo'];
-    $contraseña = $_POST['contraseña'];
-
-    // Usar password_hash para hashear la contraseña
-    $hashed_password = password_hash($contraseña, PASSWORD_DEFAULT);
-
-    // Insertar el nuevo alumno en la tabla 'alum'
-    $sql = "INSERT INTO alum (nombres, apellidos, carrera, grado, nickname, correo, contraseña, estado, FKGrado, FkCarrera) 
-            VALUES ('$nombre', '$apellido', '$carrera', '$grado', '$nickname', '$correo', '$hashed_password', 1, '$grado', '$carrera')";
-
-    if ($conn->query($sql) === TRUE) {
-        // Obtener el ID del nuevo alumno
-        $id_alum = $conn->insert_id;
-
-        // Obtener todos los IDs de los cursos
-        $sql_cursos = "SELECT id FROM cursos";
-        $result_cursos = $conn->query($sql_cursos);
-
-        if ($result_cursos->num_rows > 0) {
-            while ($row_curso = $result_cursos->fetch_assoc()) {
-                $id_curso = $row_curso['id'];
-
-                // Insertar un registro en la tabla 'notas' para cada curso
-                $sql_notas = "INSERT INTO notas (id_alum, carrera, id_curso, nota) 
-                              VALUES ('$id_alum', '$carrera', '$id_curso', 0)";
-                $conn->query($sql_notas);
-            }
+function check_connection($conn) {
+    if (!$conn->ping()) {
+        global $servername, $username, $password, $dbname;
+        $conn->close();
+        $conn = new mysqli($servername, $username, $password, $dbname);
+        if ($conn->connect_error) {
+            die("Conexión fallida: " . $conn->connect_error);
         }
-
-        echo "Registro exitoso";
-    } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
     }
+}
 
-} elseif ($_POST['tipo'] == 'docente') {
+if ($_POST['tipo'] == '--cliente') {
+    check_connection($conn);
+
     $nombre = $_POST['nombre'];
     $apellido = $_POST['apellido'];
-    $carrera = $_POST['carrera'];
-    $materia = $_POST['materia'];
-    $grado = $_POST['grado'];
     $nickname = $_POST['nickname'];
     $correo = $_POST['correo'];
     $contraseña = $_POST['contraseña'];
 
-    // Usar password_hash para hashear la contraseña
     $hashed_password = password_hash($contraseña, PASSWORD_DEFAULT);
 
-    // Incluir el campo 'estado' con el valor por defecto 1
-    $sql = "INSERT INTO prof (nombres, apellidos, carrera, materia, grado, nickname, correo, contraseña, estado) 
-            VALUES ('$nombre', '$apellido', '$carrera', '$materia', '$grado', '$nickname', '$correo', '$hashed_password', 1)";
+    $sql = "INSERT INTO cliente (nombre, apellido, nickname, correo, contra) 
+            VALUES ('$nombre', '$apellido', '$nickname', '$correo', '$hashed_password')";
 
     if ($conn->query($sql) === TRUE) {
         header('Location: index.php?success=Registro exitoso');
         exit();
     } else {
-        echo "Error: " . $conn->error; // Agregado para depuración
+        header('Location: index.php?error=Error al registrar');
+        exit();
+    }
+
+} elseif ($_POST['tipo'] == '-empleado') {
+    check_connection($conn);
+
+    $nombre = $_POST['nombre'];
+    $apellido = $_POST['apellido'];
+    $nickname = $_POST['nickname'];
+    $correo = $_POST['correo'];
+    $contraseña = $_POST['contraseña'];
+
+    $hashed_password = password_hash($contraseña, PASSWORD_DEFAULT);
+
+    $sql = "INSERT INTO empleado (nombre, apellido, nickname, correo, contra) 
+            VALUES ('$nombre', '$apellido', '$nickname', '$correo', '$hashed_password')";
+
+    if ($conn->query($sql) === TRUE) {
+        header('Location: index.php?success=Registro exitoso');
+        exit();
+    } else {
+        header('Location: index.php?error=Error al registrar');
+        exit();
+    }
+
+} elseif ($_POST['tipo'] == '-admin') {
+    check_connection($conn);
+
+    $nombre = $_POST['nombre'];
+    $apellido = $_POST['apellido'];
+    $nickname = $_POST['nickname'];
+    $correo = $_POST['correo'];
+    $contraseña = $_POST['contraseña'];
+
+    $hashed_password = password_hash($contraseña, PASSWORD_DEFAULT);
+
+    $sql = "INSERT INTO adm (nombre, apellido, nickname, correo, contra) 
+            VALUES ('$nombre', '$apellido', '$nickname', '$correo', '$hashed_password')";
+
+    if ($conn->query($sql) === TRUE) {
+        header('Location: index.php?success=Registro exitoso');
+        exit();
+    } else {
         header('Location: index.php?error=Error al registrar');
         exit();
     }

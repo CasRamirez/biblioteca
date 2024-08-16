@@ -17,7 +17,7 @@ $hashed_password = password_hash($contraseña, PASSWORD_DEFAULT);
 
 // Insertar el nuevo administrador en la tabla 'adm'
 $sql = $conn->query("INSERT INTO adm (nombres, apellidos, nickname, correo, contraseña) 
-                      VALUES ('Moshe', 'Mata', 'moshe-admin', 'moshe360@gmail.com', '$hashed_password')");
+                      VALUES ('Moshe', 'Mata', 'moshe-admin', 'moshe326@gmail.com', '$hashed_password')");
 
 if ($sql === false) {
     die("Error en la consulta: " . $conn->error);
