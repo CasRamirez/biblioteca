@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-    
+
 <?php 
 session_start();
 require 'conexion.php';
@@ -18,6 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $libro_id = intval($_POST['libro']);
     $cantidad = intval($_POST['cantidad']);
     $fecha_prestamo = date('Y-m-d');
+    $fecha_devolucion = $_POST['fecha_devolucion']; // Nueva fecha de devolución
 
     // Consulta para obtener la cantidad disponible del libro
     $sqlCheckStock = $conn->prepare("SELECT cantidad FROM libros WHERE id = ?");
@@ -31,8 +32,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($cantidad <= $cantidadDisponible) {
             // Registro del préstamo
-            $sqlInsert = $conn->prepare("INSERT INTO prestamos (cliente_id, libro_id, cantidad, fecha_prestamo) VALUES (?, ?, ?, ?)");
-            $sqlInsert->bind_param("iiis", $cliente_id, $libro_id, $cantidad, $fecha_prestamo);
+            $sqlInsert = $conn->prepare("INSERT INTO prestamos (cliente_id, libro_id, cantidad, fecha_prestamo, fecha_devolucion) VALUES (?, ?, ?, ?, ?)");
+            $sqlInsert->bind_param("iiiss", $cliente_id, $libro_id, $cantidad, $fecha_prestamo, $fecha_devolucion);
             
             if ($sqlInsert->execute()) {
                 // Actualizar la cantidad disponible del libro
@@ -183,9 +184,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label for="cantidad">Cantidad:</label>
                     <input type="number" name="cantidad" id="cantidad" min="1" required>
                 </div>
+
                 <div class="form-group">
                     <label for="fecha">Fecha de préstamo:</label>
                     <input type="date" name="fecha" id="fecha" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="fecha_devolucion">Fecha de devolución:</label>
+                    <input type="date" name="fecha_devolucion" id="fecha_devolucion" required>
                 </div>
 
                 <div class="row">

@@ -2,10 +2,11 @@
 // Conexión a la base de datos
 require 'conexion.php';
 
-// Consulta para obtener el historial de préstamos con la información del cliente y del libro
+// Consulta para obtener el historial de préstamos con la información del cliente y del libro, incluyendo la fecha de devolución
 $sql = "
     SELECT 
         p.fecha_prestamo,
+        p.fecha_devolucion,
         c.nombre AS cliente_nombre,
         c.apellido AS cliente_apellido,
         c.nickname AS cliente_nickname,
@@ -47,6 +48,7 @@ if (!$result) {
                     <th>Nombre del Libro</th>
                     <th>Cantidad de Libros Prestados</th>
                     <th>Fecha del Préstamo</th>
+                    <th>Fecha de Devolución</th>
                 </tr>
             </thead>
             <tbody>
@@ -58,6 +60,7 @@ if (!$result) {
                     <td><?php echo htmlspecialchars($row['libro_nombre']); ?></td>
                     <td><?php echo htmlspecialchars($row['cantidad_libros']); ?></td>
                     <td><?php echo htmlspecialchars($row['fecha_prestamo']); ?></td>
+                    <td><?php echo htmlspecialchars($row['fecha_devolucion']); ?></td>
                 </tr>
                 <?php endwhile; ?>
             </tbody>
