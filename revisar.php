@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Determinar el tipo de usuario basado en el nombre de usuario
     if (strpos($username, '-cliente') !== false) {
         $user_type = 'cliente';
-        $redirect_page = 'indexcliente.php';
+        $redirect_page = 'indexalum.php';
     } elseif (strpos($username, '-empleado') !== false) {
         $user_type = 'empleado';
         $redirect_page = 'indexempleado.php';

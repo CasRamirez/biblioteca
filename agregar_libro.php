@@ -15,17 +15,18 @@ if ($conn->connect_error) {
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $nombre = $_POST['nombre'];
     $descripcion = $_POST['descripcion'];
+    $fecha = $_POST['cantidad'];
 
     // Preparar y ejecutar la consulta de inserción
-    $stmt = $conn->prepare("INSERT INTO libros (nombre, descripcion) VALUES (?, ?)");
+    $stmt = $conn->prepare("INSERT INTO libros (nombre, descripcion, cantidad) VALUES (?, ?, ?)");
     if (!$stmt) {
         die("Error en la preparación de la consulta: " . $conn->error);
     }
 
-    $stmt->bind_param('ss', $nombre, $descripcion);
+    $stmt->bind_param('sss', $nombre, $descripcion,  $fecha);
 
     if ($stmt->execute()) {
-        header('Location: index.php?success=Libro agregado exitosamente');
+        header('Location: indexempleado.php?success=Libro agregado exitosamente');
         exit();
     } else {
         header('Location: agregar_libro.php?error=' . urlencode($stmt->error));
