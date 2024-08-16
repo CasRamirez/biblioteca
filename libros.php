@@ -62,15 +62,22 @@ if (!isset($_SESSION['username'])) {
             <div class="sidebar">
                 <!-- Sidebar user (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                    <style>
-                    .image .img-circle {
-                        width: 80px;
-                        height: 80px;
-                    }
+                <style>
+                        .image .img-circle {
+                            width: 80px;
+                            height: 80px;
+                        }
+                        .nickname {
+                            color: lime;
+                            font-weight: bold;
+                        }
                     </style>
-                    <div class="image">
-                        <img src="image/auron.jpg" class="img-circle elevation-3" alt="User Image">
-                        <span class="nickname"><?php echo htmlspecialchars($_SESSION['nickname']); ?></span>
+                     <div class="image">
+                        <img src="image/willy.jpg" class="img-circle elevation-3" alt="User Image">
+                        <span class="nickname">
+                            <?php echo htmlspecialchars($_SESSION['nickname']); ?>
+                           
+                        </span>
                     </div>
                 </div>
                 <!-- SidebarSearch Form -->
@@ -100,37 +107,21 @@ if (!isset($_SESSION['username'])) {
                             <ul class="nav nav-treeview">
                          
                                 <li class="nav-item">
-                                    <a href="indexadmin.php" class="nav-link">
+                                    <a href="indexprof.php" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>Tabla de Alumnos</p>
+                                        <p>Hitorial</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="indexadminP.php" class="nav-link">
+                                    <a href="libros.php" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>Tabla de Profesores</p>
+                                        <p>Libros</p>
                                     </a>
                                 </li>
-                                <li class="nav-item">
-                                    <a href="registros.php" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Registrar</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="delete_reg.php" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Ver Eliminados</p>
-                                    </a>
-                                </li>
+                               
                            
 
-                                <li class="nav-item">
-                                    <a href="interfazcontra.php" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Cambiar Contraseña</p>
-                                    </a>
-                                </li>
+                              
                                 <li class="nav-item">
                                     <a href="cerrar.php" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
@@ -180,7 +171,7 @@ if (!isset($_SESSION['username'])) {
                               
                                     
                                     <th scope="col">Editar</th>
-                                    <th scope="col">Borrar</th>
+                                   
                                 </tr>
                             </thead>
                             <tbody>

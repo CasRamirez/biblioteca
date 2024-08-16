@@ -15,7 +15,7 @@ require 'conexion.php';
                         $carreras[] = $row['nombre'];
                     }
                 } else {
-                    echo "No se encontraron carreras.";
+                    echo "No se encontraron libros.";
                 }
                
                 ?>

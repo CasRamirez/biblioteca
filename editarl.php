@@ -161,32 +161,26 @@ require 'conexion.php';
 
                 while($dat = $sql->fetch_object()){
                 ?>
-                <form action="edit.php?id=<?php echo $dat->id; ?>" method="post">
+                <form action="editl.php?id=<?php echo $dat->id; ?>" method="post">
                     <div class="mb-3">
-                        <label class="form-label">No. de Usuario</label>
+                        <label class="form-label">No. de libro</label>
                         <input type="text" class="form-control" name="id" value="<?php echo $dat->id; ?>" disabled>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Nombre del cliente</label>
-                        <input type="text" class="form-control" name="nombre" value="<?php echo $dat->descripcion;?>" placeholder="Ingrese el nombre" required>
+                        <label class="form-label">Nombre del libro</label>
+                        <input type="text" class="form-control" name="nombre" value="<?php echo $dat->nombre;?>" placeholder="Ingrese el nombre" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Apellido del cliente</label>
-                        <input type="text" class="form-control" name="apellido" value="<?php echo $dat->cantidad;?>" placeholder="Ingrese el apellido" required>
+                        <label class="form-label">Descripcion del libro</label>
+                        <input type="text" class="form-control" name="apellido" value="<?php echo $dat->descripcion;?>" placeholder="Ingrese el apellido" required>
                     </div>
-                  
+                    <div class="mb-3">
+                        <label class="form-label">Cantidad de libros</label>
+                        <input type="text" class="form-control" name="cantidad" value="<?php echo $dat->cantidad;?>" placeholder="Ingrese el apellido" required>
+                    </div>
             
         
-                    <div class="mb-3">
-                        <label class="form-label">Nickname del cliente</label>
-                        <input type="text" class="form-control" name="nickname" value="<?php echo $dat->nickname;?>" placeholder="Ingrese el nickname" required>
-                    </div>
-                   
-                    <div class="mb-3">
-                    <label class="form-label">Correo del cliente</label>
-                      <input type="email" class="form-control" name="correo"value="<?php echo $dat -> correo;?>" placeholder="Ingrese el correo" required>
-      
-                    </div>
+                  
                     <button type="submit" class="btn btn-primary">Actualizar</button>
                 </form>
                 <?php } ?>

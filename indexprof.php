@@ -127,6 +127,12 @@ $iduser = isset($_SESSION['id']) ? $_SESSION['id'] : 0;
                             </a>
                             <ul class="nav nav-treeview">
                             <li class="nav-item">
+                                    <a href="indexprof.php" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Historial</p>
+                                    </a>
+                                </li>
+                            <li class="nav-item">
                                     <a href="libros.php" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>libros</p>
