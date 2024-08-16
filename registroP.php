@@ -38,12 +38,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $correo = $_POST['correo'];
     $contraseña = $_POST['contraseña'];
 
-    $hashed_password = password_hash($contraseña, PASSWORD_DEFAULT);
+    // Encriptar la contraseña con MD5
+    $hashed_password = md5($contraseña);
 
     if ($tipo == 'cliente') {
         $sql = "INSERT INTO cliente (nombre, apellido, nickname, correo, contra, usuario_tipo) 
                 VALUES (?, ?, ?, ?, ?, 'cliente')";
-
     } elseif ($tipo == 'empleado') {
         $sql = "INSERT INTO empleado (nombre, apellido, nickname, correo, contra, usuario_tipo) 
                 VALUES (?, ?, ?, ?, ?, 'empleado')";

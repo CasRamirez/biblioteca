@@ -50,19 +50,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Verificar la contraseña
             $password_valid = false;
             if ($user_type === 'adm') {
-                // Para el usuario admin, comparar la contraseña sin encriptar
+                // Para el usuario admin, comparar la contraseña usando MD5
                 if ($password === $stored_password) {
                     $password_valid = true;
                 }
             } else {
-                // Para clientes y empleados, verificar la contraseña encriptada
-                if (password_verify($password, $stored_password)) {
+                // Para clientes y empleados, verificar la contraseña usando MD5
+                if (md5($password) === $stored_password) {
                     $password_valid = true;
                 } else {
                     echo "Contraseña incorrecta o encriptación no coincide.";
-                    // Para depuración, podrías imprimir el hash y la contraseña
-                    // echo "Hash almacenado: $stored_password\n";
-                    // echo "Contraseña ingresada: $password\n";
                 }
             }
 
