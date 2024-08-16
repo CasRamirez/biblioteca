@@ -24,77 +24,39 @@ function check_connection($conn) {
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $tipo = isset($_POST['tipo']) ? trim($_POST['tipo']) : '';
 
-    // Mensaje de depuración para verificar el valor de tipo
-    echo "Tipo recibido: $tipo"; 
-    exit(); // Salir después de mostrar el valor para verificar
+    // Depuración: Imprimir el valor recibido
+    if ($tipo != 'cliente' && $tipo != 'empleado') {
+        echo "Error: Tipo de usuario no válido.";
+        exit();
+    }
+
+    check_connection($conn);
+
+    $nombre = $_POST['nombre'];
+    $apellido = $_POST['apellido'];
+    $nickname = $_POST['nickname'];
+    $correo = $_POST['correo'];
+    $contraseña = $_POST['contraseña'];
+
+    $hashed_password = password_hash($contraseña, PASSWORD_DEFAULT);
 
     if ($tipo == 'cliente') {
-        check_connection($conn);
-
-        $nombre = $_POST['nombre'];
-        $apellido = $_POST['apellido'];
-        $nickname = $_POST['nickname'];
-        $correo = $_POST['correo'];
-        $contraseña = $_POST['contraseña'];
-
-        $hashed_password = password_hash($contraseña, PASSWORD_DEFAULT);
-
-        $sql = "INSERT INTO cliente (nombre, apellido, nickname, correo, contra) 
-                VALUES ('$nombre', '$apellido', '$nickname', '$correo', '$hashed_password')";
-
-        if ($conn->query($sql) === TRUE) {
-            header('Location: index.php?success=Registro exitoso');
-            exit();
-        } else {
-            header('Location: index.php?error=Error al registrar');
-            exit();
-        }
+        $sql = "INSERT INTO cliente (nombre, apellido, nickname, correo, contra, usuario_tipo) 
+                VALUES (?, ?, ?, ?, ?, 'cliente')";
 
     } elseif ($tipo == 'empleado') {
-        check_connection($conn);
+        $sql = "INSERT INTO empleado (nombre, apellido, nickname, correo, contra, usuario_tipo) 
+                VALUES (?, ?, ?, ?, ?, 'empleado')";
+    }
 
-        $nombre = $_POST['nombre'];
-        $apellido = $_POST['apellido'];
-        $nickname = $_POST['nickname'];
-        $correo = $_POST['correo'];
-        $contraseña = $_POST['contraseña'];
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('sssss', $nombre, $apellido, $nickname, $correo, $hashed_password);
 
-        $hashed_password = password_hash($contraseña, PASSWORD_DEFAULT);
-
-        $sql = "INSERT INTO empleado (nombre, apellido, nickname, correo, contra) 
-                VALUES ('$nombre', '$apellido', '$nickname', '$correo', '$hashed_password')";
-
-        if ($conn->query($sql) === TRUE) {
-            header('Location: index.php?success=Registro exitoso');
-            exit();
-        } else {
-            header('Location: index.php?error=Error al registrar');
-            exit();
-        }
-
-    } elseif ($tipo == 'admin') {
-        check_connection($conn);
-
-        $nombre = $_POST['nombre'];
-        $apellido = $_POST['apellido'];
-        $nickname = $_POST['nickname'];
-        $correo = $_POST['correo'];
-        $contraseña = $_POST['contraseña'];
-
-        $hashed_password = password_hash($contraseña, PASSWORD_DEFAULT);
-
-        $sql = "INSERT INTO adm (nombre, apellido, nickname, correo, contra) 
-                VALUES ('$nombre', '$apellido', '$nickname', '$correo', '$hashed_password')";
-
-        if ($conn->query($sql) === TRUE) {
-            header('Location: index.php?success=Registro exitoso');
-            exit();
-        } else {
-            header('Location: index.php?error=Error al registrar');
-            exit();
-        }
+    if ($stmt->execute()) {
+        header('Location: index.php?success=Registro exitoso');
+        exit();
     } else {
-        echo "Error: Tipo de usuario no válido.";
+        echo "Error SQL: " . $stmt->error; // Mensaje de error SQL
         exit();
     }
 }

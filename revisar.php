@@ -36,6 +36,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $table = $user_type;
         // Preparar y ejecutar la consulta para buscar el usuario
         $stmt = $conn->prepare("SELECT * FROM $table WHERE nickname=?");
+        if (!$stmt) {
+            die("Error en la preparación de la consulta: " . $conn->error);
+        }
         $stmt->bind_param('s', $username);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -55,6 +58,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 // Para clientes y empleados, verificar la contraseña encriptada
                 if (password_verify($password, $stored_password)) {
                     $password_valid = true;
+                } else {
+                    echo "Contraseña incorrecta o encriptación no coincide.";
+                    // Para depuración, podrías imprimir el hash y la contraseña
+                    // echo "Hash almacenado: $stored_password\n";
+                    // echo "Contraseña ingresada: $password\n";
                 }
             }
 

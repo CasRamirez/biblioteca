@@ -6,18 +6,19 @@ require 'conexion.php';
 ?>
 
 <?php 
-    $carreras = [];
-    $sql = "SELECT nombre FROM libros";
-    $result = $conn->query($sql);
-
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            $carreras[] = $row['nombre'];
-        }
-    } else {
-        echo "No se encontraron libros.";
-    }
-?>
+                $carreras = [];
+                $sql = "SELECT nombre FROM libros";
+                $result = $conn->query($sql);
+                
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        $carreras[] = $row['nombre'];
+                    }
+                } else {
+                    echo "No se encontraron carreras.";
+                }
+               
+                ?>
 
 <head>
     <meta charset="UTF-8">
@@ -28,70 +29,74 @@ require 'conexion.php';
     <link rel="stylesheet" href="styless.css">
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 
+
     <style>
-        /* Your custom styles */
-        .alert {
-            padding: 15px;
-            margin-bottom: 20px;
-            border: 1px solid transparent;
-            border-radius: 4px;
-        }
+    .alert {
+        padding: 15px;
+        margin-bottom: 20px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+    }
 
-        .alert-danger {
-            color: #721c24;
-            background-color: #f8d7da;
-            border-color: #f5c6cb;
-        }
+    .alert-danger {
+        color: #721c24;
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+    }
 
-        .custom-select-container {
-            position: relative;
-            display: flex;
-            align-items: center;
-            border: 1px solid #ced4da;
-            border-radius: 5px;
-            background-color: #fff;
-            padding: 5px;
-        }
+    /* Contenedor personalizado para el select */
+    .custom-select-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        background-color: #fff;
+        padding: 5px;
+    }
 
-        .custom-select {
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            border: none;
-            background: none;
-            font-size: 16px;
-            padding: 10px;
-            width: 100%;
-            outline: none;
-            color: #495057;
-        }
+    /* Estilo personalizado para el select */
+    .custom-select {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        border: none;
+        background: none;
+        font-size: 16px;
+        padding: 10px;
+        width: 100%;
+        outline: none;
+        color: #495057;
+    }
 
-        .custom-select-container::after {
-            content: '\f078';
-            font-family: 'Font Awesome 5 Free';
-            font-weight: 900;
-            position: absolute;
-            right: 10px;
-            pointer-events: none;
-            color: #495057;
-        }
+    /* Flecha personalizada */
+    .custom-select-container::after {
+        content: '\f078';
+        font-family: 'Font Awesome 5 Free';
+        font-weight: 900;
+        position: absolute;
+        right: 10px;
+        pointer-events: none;
+        color: #495057;
+    }
 
-        .custom-select:focus {
-            border-color: #80bdff;
-            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-        }
+    /* Efecto al enfocar */
+    .custom-select:focus {
+        border-color: #80bdff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
 
-        .custom-select:not(:placeholder-shown) {
-            padding-right: 30px;
-        }
+    /* Ajuste del padding del input cuando tiene contenido */
+    .custom-select:not(:placeholder-shown) {
+        padding-right: 30px;
+    }
     </style>
 </head>
 
 <body>
     <div class="container" id="container">
-        <!-- Formulario de Registro de Clientes -->
         <div class="form-container register-container">
-            <form id="formCliente" action="registroP.php" method="post">
+        <form id="formCliente" action="registroP.php" method="post">
                 <h1>Registro de Clientes</h1>
                 <?php
                 if (isset($_GET['error']) && $_GET['tipo'] === 'cliente') {
@@ -130,9 +135,15 @@ require 'conexion.php';
             </form>
         </div>
 
-        <!-- Formulario de Registro de Empleados -->
+
+        <!-- REGION PROFESORESS -->
+        <!-- REGISTROS DE PROFEOSRES -->
+
+
+
+
         <div class="form-container login-container">
-            <form id="formEmpleado" action="registroP.php" method="post">
+        <form id="formEmpleado" action="registroP.php" method="post">
                 <h1>Registro de Empleados</h1>
                 <?php
                 if (isset($_GET['error']) && $_GET['tipo'] === 'empleado') {
@@ -171,9 +182,7 @@ require 'conexion.php';
                     </center>
                 </div>
 
-            </form>
-        </div>
-
+            </form>        </div>
         <div class="overlay-container">
             <div class="overlay">
                 <div class="overlay-panel overlay-left">
@@ -197,6 +206,9 @@ require 'conexion.php';
                         </center>
                     </div>
                 </div>
+
+
+
 
                 <div class="overlay-panel overlay-right">
                     <h1 class="title">Registro de Empleados</h1>
@@ -222,7 +234,6 @@ require 'conexion.php';
             </div>
         </div>
     </div>
-
     <script>
     function addSuffixToNickname(input, suffix) {
         const value = input.value.trim();
@@ -237,9 +248,34 @@ require 'conexion.php';
     }
     </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+PMB3hu4rY4OoO6MGh6j6hOWc6pDI" crossorigin="anonymous">
+    <script>
+    function updateGradoOptions() {
+        var carreraSelect = document.getElementById('carrera');
+        var gradoSelect = document.getElementById('grado');
+        var selectedCarrera = carreraSelect.value;
+
+        // Limpiar las opciones actuales del select de grado
+        gradoSelect.innerHTML = '<option value="" disabled selected>Seleccione su grado</option>';
+
+        // Definir las opciones de grado
+        var gradosPrimaria = ['Primero', 'Segundo', 'Tercero', 'Cuarto', 'Quinto', 'Sexto'];
+        var gradosOtros = ['Primero', 'Segundo', 'Tercero'];
+
+        var grados = selectedCarrera.toLowerCase() === 'primaria' ? gradosPrimaria : gradosOtros;
+
+        // Agregar las nuevas opciones de grado
+        for (var i = 0; i < grados.length; i++) {
+            var option = document.createElement('option');
+            option.value = grados[i];
+            option.text = grados[i];
+            gradoSelect.add(option);
+        }
+    }
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+    </script>
+    <script src="script.js"></script>
 </body>
 
 </html>
