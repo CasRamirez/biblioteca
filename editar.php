@@ -7,20 +7,7 @@ if (!isset($_SESSION['username'])) {
 require 'conexion.php';
 
 ?>
-<?php 
-                $carreras = [];
-                $sql = "SELECT nombre FROM carrera";
-                $result = $conn->query($sql);
-                
-                if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        $carreras[] = $row['nombre'];
-                    }
-                } else {
-                    echo "No se encontraron carreras.";
-                }
-               
-                ?>
+
 
 
 
@@ -166,7 +153,7 @@ require 'conexion.php';
                 <?php
                 $id = $_GET['id'];
 
-                $sql = $conn->query("SELECT * FROM alum WHERE id='$id'");
+                $sql = $conn->query("SELECT * FROM cliente WHERE id='$id'");
 
                 if (!$sql) {
                     die("Error en la consulta SQL: " . $conn->error);
@@ -180,42 +167,23 @@ require 'conexion.php';
                         <input type="text" class="form-control" name="id" value="<?php echo $dat->id; ?>" disabled>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Nombre del profesor</label>
-                        <input type="text" class="form-control" name="nombre" value="<?php echo $dat->nombres;?>" placeholder="Ingrese el nombre" required>
+                        <label class="form-label">Nombre del cliente</label>
+                        <input type="text" class="form-control" name="nombre" value="<?php echo $dat->nombre;?>" placeholder="Ingrese el nombre" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Apellido del profesor</label>
-                        <input type="text" class="form-control" name="apellido" value="<?php echo $dat->apellidos;?>" placeholder="Ingrese el apellido" required>
+                        <label class="form-label">Apellido del cliente</label>
+                        <input type="text" class="form-control" name="apellido" value="<?php echo $dat->apellido;?>" placeholder="Ingrese el apellido" required>
                     </div>
-                    <div class="form-group">
-                        <label for="carrera">Carrera</label>
-                        <div class="input-group mb-3 custom-select-container">
-                            <select id="carrera" name="carrera" class="form-control custom-select" required onchange="updateGradoOptions()">
-                                <option value="" disabled selected>Seleccione su carrera</option>
-                                <?php foreach ($carreras as $carrera): ?>
-                                    <option value="<?php echo htmlspecialchars($carrera); ?>">
-                                        <?php echo htmlspecialchars($carrera); ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                <label for="grado">Grado</label>
-                <div class="input-group mb-3 custom-select-container">
-                    <select id="grado" name="grado" class="form-control custom-select" required>
-                        <option value="" disabled selected>Seleccione su grado</option>
-                    </select>
-                </div>
-            </div>
+                  
+            
         
                     <div class="mb-3">
-                        <label class="form-label">Nickname del profesor</label>
+                        <label class="form-label">Nickname del cliente</label>
                         <input type="text" class="form-control" name="nickname" value="<?php echo $dat->nickname;?>" placeholder="Ingrese el nickname" required>
                     </div>
                    
                     <div class="mb-3">
-                    <label class="form-label">Correo del Alumno</label>
+                    <label class="form-label">Correo del cliente</label>
                       <input type="email" class="form-control" name="correo"value="<?php echo $dat -> correo;?>" placeholder="Ingrese el correo" required>
       
                     </div>

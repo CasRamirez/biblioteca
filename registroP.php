@@ -42,18 +42,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $hashed_password = md5($contraseña);
 
     if ($tipo == 'cliente') {
-        $sql = "INSERT INTO cliente (nombre, apellido, nickname, correo, contra, usuario_tipo) 
-                VALUES (?, ?, ?, ?, ?, 'cliente')";
+        $sql = "INSERT INTO cliente (nombre, apellido, nickname, correo, contra, usuario_tipo, estado) 
+                VALUES (?, ?, ?, ?, ?, 'cliente','1')";
     } elseif ($tipo == 'empleado') {
-        $sql = "INSERT INTO empleado (nombre, apellido, nickname, correo, contra, usuario_tipo) 
-                VALUES (?, ?, ?, ?, ?, 'empleado')";
+        $sql = "INSERT INTO empleado (nombre, apellido, nickname, correo, contra, usuario_tipo, estado) 
+                VALUES (?, ?, ?, ?, ?, 'empleado', '1')";
     }
 
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('sssss', $nombre, $apellido, $nickname, $correo, $hashed_password);
 
     if ($stmt->execute()) {
-        header('Location: index.php?success=Registro exitoso');
+        header('Location: registros.php?success=Registro exitoso');
         exit();
     } else {
         echo "Error SQL: " . $stmt->error; // Mensaje de error SQL

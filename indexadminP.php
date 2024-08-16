@@ -199,8 +199,6 @@ if (!isset($_SESSION['username'])) {
                                     <th scope="col">#</th>
                                     <th scope="col">Nombre</th>
                                     <th scope="col">Apellido</th>
-                                    <th scope="col">Carrera</th>
-                                    <th scope="col">Materia</th>
                                     <th scope="col">Nickname</th>
                                     <th scope="col">Correo</th>
                                     <th scope="col">Editar</th>
@@ -210,15 +208,13 @@ if (!isset($_SESSION['username'])) {
                             <tbody>
                                 <?php
                                     include "conexion.php";
-                                    $sql = $conn->query("SELECT * FROM prof WHERE estado = 1");
+                                    $sql = $conn->query("SELECT * FROM empleado WHERE estado = 1");
                                     while ($dat = $sql->fetch_object()) {
                                 ?>
                                 <tr>
                                     <td><?php echo isset($dat->id) ? $dat->id : 'N/A'; ?></td>
-                                    <td><?php echo isset($dat->nombres) ? $dat->nombres : 'N/A'; ?></td>
-                                    <td><?php echo isset($dat->apellidos) ? $dat->apellidos : 'N/A'; ?></td>
-                                    <td><?php echo isset($dat->carrera) ? $dat->carrera : 'N/A'; ?></td>
-                                    <td><?php echo isset($dat->materia) ? $dat->materia : 'N/A'; ?></td>
+                                    <td><?php echo isset($dat->nombre) ? $dat->nombre : 'N/A'; ?></td>
+                                    <td><?php echo isset($dat->apellido) ? $dat->apellido : 'N/A'; ?></td>
                                     <td><?php echo isset($dat->nickname) ? $dat->nickname : 'N/A'; ?></td>
                                     <td><?php echo isset($dat->correo) ? $dat->correo : 'N/A'; ?></td>
                                     <td><a href="editarP.php?id=<?php echo $dat->id ?>" class="btn btn-warning"><i

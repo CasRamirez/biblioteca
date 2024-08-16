@@ -198,9 +198,6 @@ if (!isset($_SESSION['username'])) {
                                 <th scope="col">#</th>
                                 <th scope="col">Nombre</th>
                                 <th scope="col">Apellido</th>
-                                <th scope="col">Grado</th>
-                                <th scope="col">Carrera</th>
-                                <th scope="col">Materia</th>
                                 <th scope="col">Usuario</th>
                                 <th scope="col">Razón</th>
                                 <th scope="col">Eliminado por</th>
@@ -212,12 +209,12 @@ if (!isset($_SESSION['username'])) {
     include "conexion.php";
     $sql = $conn->query("
     
-    SELECT id, nombres, apellidos, grado, carrera, NULL AS materia, nickname, razon, user_delete 
-    FROM alum 
+    SELECT id, nombre, apellido,nickname, razon, user_delete 
+    FROM cliente 
     WHERE estado = 0
       UNION ALL                
-    SELECT id, nombres, apellidos, grado AS grado, carrera, materia, nickname, razon, user_delete 
-    FROM prof 
+    SELECT id, nombre, apellido, nickname, razon, user_delete 
+    FROM empleado 
     WHERE estado = 0
 ");
 
@@ -225,11 +222,8 @@ if (!isset($_SESSION['username'])) {
     while ($row = $sql->fetch_assoc()) {
         echo "<tr>";
         echo "<th scope='row'>" . $contador . "</th>";
-        echo "<td>" . htmlspecialchars($row['nombres']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['apellidos']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['grado']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['carrera']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['materia']) . "</td>";
+        echo "<td>" . htmlspecialchars($row['nombre']) . "</td>";
+        echo "<td>" . htmlspecialchars($row['apellido']) . "</td>";
         echo "<td>" . htmlspecialchars($row['nickname']) . "</td>";
         echo "<td>" . htmlspecialchars($row['razon']) . "</td>";
         echo "<td>" . htmlspecialchars($row['user_delete']) . "</td>";

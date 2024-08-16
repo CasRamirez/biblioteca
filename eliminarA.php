@@ -7,7 +7,7 @@ if (isset($_GET['id']) && isset($_GET['reason']) && isset($_GET['nickname'])) {
     $nickname = $_GET['nickname'];
 
     // Actualiza el registro con la razón de eliminación y el usuario que realizó la eliminación
-    $sql = $conn->prepare("UPDATE alum SET estado = 0, razon = ?, user_delete = ? WHERE id = ?");
+    $sql = $conn->prepare("UPDATE cliente SET estado = 0, razon = ?, user_delete = ? WHERE id = ?");
     $sql->bind_param("ssi", $reason, $nickname, $id);
 
     if ($sql->execute()) {
