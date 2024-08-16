@@ -1,6 +1,6 @@
 <?php
 $sn = "localhost";//sn= server name
-$db = "cole";//db = database
+$db = "bibli";//db = database
 $user = "root";
 $pass = "";
 $conn = mysqli_connect($sn,$user,$pass,$db);

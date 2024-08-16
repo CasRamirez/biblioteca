@@ -6,19 +6,18 @@ require 'conexion.php';
 ?>
 
 <?php 
-                $carreras = [];
-                $sql = "SELECT nombre FROM carrera";
-                $result = $conn->query($sql);
-                
-                if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        $carreras[] = $row['nombre'];
-                    }
-                } else {
-                    echo "No se encontraron carreras.";
-                }
-               
-                ?>
+    $carreras = [];
+    $sql = "SELECT nombre FROM libros";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $carreras[] = $row['nombre'];
+        }
+    } else {
+        echo "No se encontraron libros.";
+    }
+?>
 
 <head>
     <meta charset="UTF-8">
@@ -29,83 +28,79 @@ require 'conexion.php';
     <link rel="stylesheet" href="styless.css">
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 
-
     <style>
-    .alert {
-        padding: 15px;
-        margin-bottom: 20px;
-        border: 1px solid transparent;
-        border-radius: 4px;
-    }
+        /* Your custom styles */
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
 
-    .alert-danger {
-        color: #721c24;
-        background-color: #f8d7da;
-        border-color: #f5c6cb;
-    }
+        .alert-danger {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
 
-    /* Contenedor personalizado para el select */
-    .custom-select-container {
-        position: relative;
-        display: flex;
-        align-items: center;
-        border: 1px solid #ced4da;
-        border-radius: 5px;
-        background-color: #fff;
-        padding: 5px;
-    }
+        .custom-select-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            background-color: #fff;
+            padding: 5px;
+        }
 
-    /* Estilo personalizado para el select */
-    .custom-select {
-        appearance: none;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        border: none;
-        background: none;
-        font-size: 16px;
-        padding: 10px;
-        width: 100%;
-        outline: none;
-        color: #495057;
-    }
+        .custom-select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            border: none;
+            background: none;
+            font-size: 16px;
+            padding: 10px;
+            width: 100%;
+            outline: none;
+            color: #495057;
+        }
 
-    /* Flecha personalizada */
-    .custom-select-container::after {
-        content: '\f078';
-        font-family: 'Font Awesome 5 Free';
-        font-weight: 900;
-        position: absolute;
-        right: 10px;
-        pointer-events: none;
-        color: #495057;
-    }
+        .custom-select-container::after {
+            content: '\f078';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 10px;
+            pointer-events: none;
+            color: #495057;
+        }
 
-    /* Efecto al enfocar */
-    .custom-select:focus {
-        border-color: #80bdff;
-        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-    }
+        .custom-select:focus {
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
 
-    /* Ajuste del padding del input cuando tiene contenido */
-    .custom-select:not(:placeholder-shown) {
-        padding-right: 30px;
-    }
+        .custom-select:not(:placeholder-shown) {
+            padding-right: 30px;
+        }
     </style>
 </head>
 
 <body>
     <div class="container" id="container">
+        <!-- Formulario de Registro de Clientes -->
         <div class="form-container register-container">
-            <form id="formAlumno" action="registroP.php" method="post">
-                <h1>Registro de Alumnos</h1>
+            <form id="formCliente" action="registroP.php" method="post">
+                <h1>Registro de Clientes</h1>
                 <?php
-                if (isset($_GET['error']) && $_GET['tipo'] === 'alumno') {
+                if (isset($_GET['error']) && $_GET['tipo'] === 'cliente') {
                     echo "<div class='alert alert-danger' role='alert'>";
                     echo $_GET['error'];
                     echo "</div>";
                 }
                 ?>
-                <input type="hidden" name="tipo" value="alumno">
+                <input type="hidden" name="tipo" value="cliente">
                 <div class="input-group mb-3">
                     <input type="text" name="nombre" class="form-control" placeholder="Ingrese nombre" required>
                 </div>
@@ -113,57 +108,9 @@ require 'conexion.php';
                     <input type="text" name="apellido" class="form-control" placeholder="Ingrese apellidos" required>
                 </div>
 
-
-
-                <?php
-
-
-
-                    if ($conn->connect_error) {
-                        die("Error de conexión: " . $conn->connect_error);
-                    }
-                    $sql = "SELECT id, nombre FROM carrera";
-                    $result = $conn->query($sql);
-
-                    if ($result->num_rows > 0) {
-                        echo '<div class="form-group">';
-                        echo '    <label for="carrera">Carrera</label>';
-                        echo '    <div class="input-group mb-3 custom-select-container">';
-                        echo '        <select id="carrera" name="carrera" class="form-control custom-select" required>';
-                        echo '            <option value="" disabled selected>Seleccione su carrera</option>';
-                        
-                        while ($row = $result->fetch_assoc()) {
-                            echo '            <option value="' . $row['id'] . '">' . $row['nombre'] . '</option>';
-                        }
-                        
-                        echo '        </select>';
-                        echo '    </div>';
-                        echo '</div>';
-                    } else {
-                        echo "No se encontraron carreras.";
-                    }
-                    ?>
-
-                <!-- Select para grado -->
-                <div class="form-group">
-                    <label for="grado">Grado</label>
-                    <div class="input-group mb-3 custom-select-container">
-                        <select id="grado" name="grado" class="form-control custom-select" required>
-                            <option value="" selected>Seleccione su grado</option>
-                            <option value="1">Primero</option>
-                            <option value="2">Segundo</option>
-                            <option value="3">Tercero</option>
-                            <option value="4">Cuarto</option>
-                            <option value="5">Quinto</option>
-                            <option value="6">Sexto</option>
-                        </select>
-                    </div>
-                </div>
-
-
                 <div class="input-group mb-3">
-                    <input type="text" name="nickname" id="nicknameAlumno" class="form-control"
-                        placeholder="Ingrese el Usuario" required onblur="addSuffixToNickname(this, 'alum')">
+                    <input type="text" name="nickname" id="nicknameCliente" class="form-control"
+                        placeholder="Ingrese el Usuario" required onblur="addSuffixToNickname(this, 'cliente')">
                 </div>
                 <div class="input-group mb-3">
                     <input type="email" name="correo" class="form-control" placeholder="Ingrese el correo" required>
@@ -176,31 +123,25 @@ require 'conexion.php';
                     <center>
                         <div class="col-6">
                             <button type="submit" class="btn btn-block btn-outline-primary btn-sm">Registrar
-                                Alumno</button><br>
+                                Cliente</button><br>
                         </div>
                     </center>
                 </div>
             </form>
         </div>
 
-
-        <!-- REGION PROFESORESS -->
-        <!-- REGISTROS DE PROFEOSRES -->
-
-
-
-
+        <!-- Formulario de Registro de Empleados -->
         <div class="form-container login-container">
-            <form id="formDocente" action="registroP.php" method="post">
-                <h1>Registro de Profesores</h1>
+            <form id="formEmpleado" action="registroP.php" method="post">
+                <h1>Registro de Empleados</h1>
                 <?php
-                if (isset($_GET['error']) && $_GET['tipo'] === 'docente') {
+                if (isset($_GET['error']) && $_GET['tipo'] === 'empleado') {
                     echo "<div class='alert alert-danger' role='alert'>";
                     echo $_GET['error'];
                     echo "</div>";
                 }
                 ?>
-                <input type="hidden" name="tipo" value="docente">
+                <input type="hidden" name="tipo" value="empleado">
                 <div class="input-group mb-3">
                     <input type="text" name="nombre" class="form-control" placeholder="Ingrese su nombre completo"
                         required>
@@ -210,82 +151,9 @@ require 'conexion.php';
                         required>
                 </div>
 
-
-
-                <?php
-
-
-
-if ($conn->connect_error) {
-    die("Error de conexión: " . $conn->connect_error);
-}
-$sql = "SELECT id, nombre FROM carrera";
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
-    echo '<div class="form-group">';
-    echo '    <label for="carrera">Carrera</label>';
-    echo '    <div class="input-group mb-3 custom-select-container">';
-    echo '        <select id="carrera" name="carrera" class="form-control custom-select" required>';
-    echo '            <option value="" disabled selected>Seleccione su carrera</option>';
-    
-    while ($row = $result->fetch_assoc()) {
-        echo '            <option value="' . $row['id'] . '">' . $row['nombre'] . '</option>';
-    }
-    
-    echo '        </select>';
-    echo '    </div>';
-    echo '</div>';
-} else {
-    echo "No se encontraron carreras.";
-}
-?>
-
-                <!-- Select para grado -->
-                <div class="form-group">
-                    <label for="grado">Grado</label>
-                    <div class="input-group mb-3 custom-select-container">
-                        <select id="grado" name="grado" class="form-control custom-select" required>
-                            <option value="" selected>Seleccione su grado</option>
-                            <option value="1">Primero</option>
-                            <option value="2">Segundo</option>
-                            <option value="3">Tercero</option>
-                            <option value="4">Cuarto</option>
-                            <option value="5">Quinto</option>
-                            <option value="6">Sexto</option>
-                        </select>
-                    </div>
-                </div>
-
-                <?php 
-            $materias = [];
-            $sql = "SELECT nombre FROM cursos";
-            $result = $conn->query($sql);
-            
-            if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                    $materias[] = $row['nombre'];
-                }
-            }
-            ?>
-                <div class="form-group">
-                    <label for="materia">Materia</label>
-                    <div class="input-group mb-3 custom-select-container">
-                        <select id="materia" name="materia" class="form-control custom-select" required>
-                            <option value="" disabled selected>Seleccione la materia</option>
-                            <?php foreach ($materias as $materia): ?>
-                            <option value="<?php echo htmlspecialchars($materia); ?>">
-                                <?php echo htmlspecialchars($materia); ?>
-                            </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                </div>
-
-
                 <div class="input-group mb-3">
-                    <input type="text" name="nickname" id="nicknameProfesor" class="form-control"
-                        placeholder="Ingrese el Usuario" required onblur="addSuffixToNickname(this, 'prof')">
+                    <input type="text" name="nickname" id="nicknameEmpleado" class="form-control"
+                        placeholder="Ingrese el Usuario" required onblur="addSuffixToNickname(this, 'empleado')">
                 </div>
                 <div class="input-group mb-3">
                     <input type="email" name="correo" class="form-control" placeholder="Ingrese el correo" required>
@@ -298,19 +166,20 @@ if ($result->num_rows > 0) {
                     <center>
                         <div class="col-6">
                             <button type="submit" class="btn btn-block btn-outline-primary btn-sm">Registrar
-                                Profesor</button><br>
+                                Empleado</button><br>
                         </div>
                     </center>
                 </div>
 
             </form>
         </div>
+
         <div class="overlay-container">
             <div class="overlay">
                 <div class="overlay-panel overlay-left">
-                    <h1 class="title">Registro de Alumnos</h1>
+                    <h1 class="title">Registro de Clientes</h1>
                     <p></p>
-                    <button class="ghost" id="login">Registro de Profesores
+                    <button class="ghost" id="login">Registro de Empleados
                         <i class="lni lni-arrow-left login"></i>
                     </button>
                     <div class="row">
@@ -329,13 +198,10 @@ if ($result->num_rows > 0) {
                     </div>
                 </div>
 
-
-
-
                 <div class="overlay-panel overlay-right">
-                    <h1 class="title">Registro de Profesores</h1>
+                    <h1 class="title">Registro de Empleados</h1>
                     <p></p>
-                    <button class="ghost" id="register">Registro de Alumnos
+                    <button class="ghost" id="register">Registro de Clientes
                         <i class="lni lni-arrow-right register"></i>
                     </button>
                     <div class="row">
@@ -356,6 +222,7 @@ if ($result->num_rows > 0) {
             </div>
         </div>
     </div>
+
     <script>
     function addSuffixToNickname(input, suffix) {
         const value = input.value.trim();
@@ -370,34 +237,9 @@ if ($result->num_rows > 0) {
     }
     </script>
 
-    <script>
-    function updateGradoOptions() {
-        var carreraSelect = document.getElementById('carrera');
-        var gradoSelect = document.getElementById('grado');
-        var selectedCarrera = carreraSelect.value;
-
-        // Limpiar las opciones actuales del select de grado
-        gradoSelect.innerHTML = '<option value="" disabled selected>Seleccione su grado</option>';
-
-        // Definir las opciones de grado
-        var gradosPrimaria = ['Primero', 'Segundo', 'Tercero', 'Cuarto', 'Quinto', 'Sexto'];
-        var gradosOtros = ['Primero', 'Segundo', 'Tercero'];
-
-        var grados = selectedCarrera.toLowerCase() === 'primaria' ? gradosPrimaria : gradosOtros;
-
-        // Agregar las nuevas opciones de grado
-        for (var i = 0; i < grados.length; i++) {
-            var option = document.createElement('option');
-            option.value = grados[i];
-            option.text = grados[i];
-            gradoSelect.add(option);
-        }
-    }
-    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+PMB3hu4rY4OoO6MGh6j6hOWc6pDI" crossorigin="anonymous">
     </script>
-    <script src="script.js"></script>
 </body>
 
 </html>

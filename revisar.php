@@ -42,10 +42,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
-            $stored_hashed_password = $row['contra'];
+            $stored_password = $row['contra'];
 
-            // Verificar la contraseña encriptada
-            if (password_verify($password, $stored_hashed_password)) {
+            // Verificar la contraseña
+            $password_valid = false;
+            if ($user_type === 'adm') {
+                // Para el usuario admin, comparar la contraseña sin encriptar
+                if ($password === $stored_password) {
+                    $password_valid = true;
+                }
+            } else {
+                // Para clientes y empleados, verificar la contraseña encriptada
+                if (password_verify($password, $stored_password)) {
+                    $password_valid = true;
+                }
+            }
+
+            if ($password_valid) {
                 // Configurar variables de sesión
                 $_SESSION['username'] = $username;
                 $_SESSION['nickname'] = $row['nickname'];
